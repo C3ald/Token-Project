@@ -93,7 +93,7 @@ class Blockchain:
         DataBase.truncate()
         for item in data:
             # formatted = {'node': item}
-            DataBase.insert(formatted)
+            DataBase.insert(item)
         return 'data has been added!!'
     
     def add_node_to_file_tinydb(self, data, DataBase):
