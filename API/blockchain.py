@@ -217,6 +217,7 @@ class Blockchain:
                     self.chain = new_chain
                 return self.chain
             else:
+                self.replace_chain()
                 return self.chain
         else:
             self.replace_chain()
