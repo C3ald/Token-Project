@@ -86,8 +86,17 @@ class Blockchain:
         return json.loads(json.dumps(data))
         
 
-
     def add_data(self, data, DataBase):
+        """ This adds data to the database that is selected """
+        
+
+        DataBase.truncate()
+        for item in data:
+            formatted = {'node': item}
+            DataBase.insert(formatted)
+        return 'data has been added!!'
+    
+    def add_node_to_file_tinydb(self, data, DataBase):
         """ This adds data to the database that is selected """
         
 
@@ -501,7 +510,7 @@ class Blockchain:
             self.nodes = set(self.nodes)
             self.nodes = list(self.nodes)
             # self.add_node_to_file()
-            self.add_data(data=self.nodes, DataBase=NODES)
+            self.add_node_to_file_tinydb(self.nodes, NODES)
         return self.nodes[-1]
 
         # try:
