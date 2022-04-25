@@ -510,8 +510,8 @@ class Blockchain:
         if test.status_code == 200:
             new_node = address
             self.nodes.append(new_node)
-            self.nodes = set(self.nodes)
-            self.nodes = list(self.nodes)
+            # self.nodes = set(self.nodes)
+            # self.nodes = list(self.nodes)
             # self.add_node_to_file()
             self.add_node_to_file_tinydb(self.nodes, NODES)
         return self.nodes[-1]
