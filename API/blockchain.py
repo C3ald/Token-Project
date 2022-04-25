@@ -184,7 +184,7 @@ class Blockchain:
 
     def post_chain(self, block):
         """ sends the new block to all nodes """
-        for node in self.nodes:
+        for node['node'] in self.nodes:
             chain = block
             json = {'blockchain':chain}
             url = r.post(f'http://{node}/insert_block', json)
@@ -541,7 +541,7 @@ class Blockchain:
         else:
             longest_chain = None
             max_length = len(self.chain)
-            for node in network:
+            for node['node'] in network:
                 print(f'https://{node}/get_the_chain')
                 response = r.get(f'https://{node}/get_the_chain')
                 if response.status_code==200:
