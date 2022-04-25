@@ -271,7 +271,8 @@ async def add_node(url:Url):
     """ This is used to add nodes and announce the node to the network and should be inserted like this : IP:port or DNS:port"""
     item = url.node
     blockchain.add_node(item) 
-    for node in blockchain.nodes:
+    for nodes in blockchain.nodes:
+        node = nodes['node']
         if node is not item:
             json = {'node':node}
             r.post(f'http://{node}/add_one_node/', json=json)
