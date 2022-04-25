@@ -92,7 +92,7 @@ class Blockchain:
 
         DataBase.truncate()
         for item in data:
-            formatted = {'node': item}
+            # formatted = {'node': item}
             DataBase.insert(formatted)
         return 'data has been added!!'
     
