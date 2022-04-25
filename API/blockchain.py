@@ -544,29 +544,33 @@ class Blockchain:
             max_length = len(self.chain)
             for nodes in network:
                 node = nodes['node']
-                print(f'http://{node}/get_the_chain')
-                response = r.get(f'http://{node}/get_the_chain')
-                if response.status_code==200:
-                    length = response.json()['length']
-                    chain = response.json()['blockchain']
-                    if length > max_length and self.is_chain_valid(chain=chain):
-                        max_length = length
-                        longest_chain=chain
-                if longest_chain != None:
-                    if len(longest_chain) > len(self.chain):
-                        self.chain = longest_chain
-                        self.unconfirmed_transactions = []
-                        self.add_data(data=self.unconfirmed_transactions, DataBase=UNconfirmed_transactions)
-                        return True
+                try:
+                    print(f'http://{node}/get_the_chain')
+                    response = r.get(f'http://{node}/get_the_chain')
+                    if response.status_code==200:
+                        length = response.json()['length']
+                        chain = response.json()['blockchain']
+                        if length > max_length and self.is_chain_valid(chain=chain):
+                            max_length = length
+                            longest_chain=chain
+                    if longest_chain != None:
+                        if len(longest_chain) > len(self.chain):
+                            self.chain = longest_chain
+                            self.unconfirmed_transactions = []
+                            self.add_data(data=self.unconfirmed_transactions, DataBase=UNconfirmed_transactions)
+                            return True
+                        else:
+                            longest_chain = self.chain
                     else:
                         longest_chain = self.chain
-                else:
-                    longest_chain = self.chain
-                if response.status_code != 200:
-                    longest_chain = self.chain
-                    max_length = len(self.chain)
-                
-                return False
+                    if response.status_code != 200:
+                        longest_chain = self.chain
+                        max_length = len(self.chain)
+
+
+                except:
+                    pass
+            return False
 
     def protocol_connections(self):
         """ The Token Protocol p2p network connection algorithm"""
