@@ -543,6 +543,7 @@ class Blockchain:
             return {'message': 'add some nodes to get the latest chain','blockchain': self.chain}
         else:
             longest_chain = None
+            print(self.nodes)
             max_length = len(self.chain)
             for nodes in self.nodes:
                 node = nodes['node']
