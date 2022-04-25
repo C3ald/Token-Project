@@ -273,7 +273,7 @@ async def add_node(url:Url):
     blockchain.add_node(item) 
     for nodes in blockchain.nodes:
         node = nodes['node']
-        if node is not item:
+        if node != item:
             json = {'node':node}
             r.post(f'http://{node}/add_one_node/', json=json)
             json = {'node':node}
