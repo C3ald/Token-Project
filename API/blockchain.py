@@ -35,6 +35,7 @@ class Blockchain:
         self.nodes = []
         if len(self.read_data(NODES)) > len(self.nodes):
             self.nodes = self.read_data(NODES)
+            print(self.nodes)
         else:
             # NODES.insert(self.nodes)
             # self.read_data(NODES)
@@ -541,9 +542,10 @@ class Blockchain:
         else:
             longest_chain = None
             max_length = len(self.chain)
-            for node['node'] in network:
-                print(f'https://{node}/get_the_chain')
-                response = r.get(f'https://{node}/get_the_chain')
+            for nodes in network:
+                node = nodes['node']
+                print(f'http://{node}/get_the_chain')
+                response = r.get(f'http://{node}/get_the_chain')
                 if response.status_code==200:
                     length = response.json()['length']
                     chain = response.json()['blockchain']
