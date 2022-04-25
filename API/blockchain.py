@@ -131,8 +131,7 @@ class Blockchain:
                 transactionlist = []
                 if len(self.chain) > 0:
                     for transaction in self.unconfirmed_transactions:
-                        validtransaction = self.verify_transactions(
-                            transaction)
+                        validtransaction = self.verify_transactions(transaction)
                         if validtransaction != None:
                             self.transactions.append()
                     if len(self.transactions) > 0:
