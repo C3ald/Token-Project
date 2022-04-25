@@ -292,7 +292,7 @@ class Blockchain:
         """Checks if the chain is valid with checking the previous hash and the proof"""
         previous_block = chain[0]
         block_index = 1
-        algs.difficulty_increase(chain=chain, nodes=self.nodes)
+        algs.difficulty_increase(chain, self.nodes)
         while block_index < len(chain):
             block = chain[block_index]
 
