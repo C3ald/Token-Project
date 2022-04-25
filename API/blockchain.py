@@ -538,13 +538,13 @@ class Blockchain:
 
     def replace_chain(self):
         """ This replaces the chain and checks if it is valid """
-        network = self.nodes
+
         if len(self.nodes) == 0:
             return {'message': 'add some nodes to get the latest chain','blockchain': self.chain}
         else:
             longest_chain = None
             max_length = len(self.chain)
-            for nodes in network:
+            for nodes in self.nodes:
                 node = nodes['node']
                 try:
                     print(f'http://{node}/get_the_chain')
