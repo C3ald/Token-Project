@@ -514,6 +514,7 @@ class Blockchain:
             # self.nodes = list(self.nodes)
             # self.add_node_to_file()
             self.add_node_to_file_tinydb(self.nodes, NODES)
+            self.nodes = self.read_data(NODES)
         return self.nodes[-1]
 
         # try:
