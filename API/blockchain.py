@@ -1,4 +1,9 @@
 #!/usr/bin/python3
+import sys
+sys.path.insert(0, 'Utilities')
+sys.path.insert(0, 'Utilities/ProofOfStake')
+
+
 import datetime
 from main import ProofOfStakeMAIN
 from tinydb import TinyDB, Query
@@ -9,12 +14,11 @@ import json
 from urllib.parse import urlparse
 from uuid import uuid1, uuid4
 import requests as r
-import sys
+
 import random
 from passlib.hash import pbkdf2_sha256
 import base64
-sys.path.insert(0, 'Utilities')
-sys.path.insert(0, 'Utilities/ProofOfStake')
+
 # git add .
 # git commit -m "Message"
 # git push
