@@ -187,8 +187,7 @@ class Blockchain:
         """ sends the new block to all nodes """
         for nodes in self.nodes:
             node = nodes['node']
-            chain = block
-            json = {'block':chain}
+            json = {"block":block}
             url = r.post(f'http://{node}/insert_block', json)
             url_status = url.status_code
             print(f"http://{node}/insert_block \n{url_status}")
