@@ -205,7 +205,7 @@ class Blockchain:
         """ Updates the chain and checks if the new block is valid """
         lengthofunconfirmedtransactions = len(self.unconfirmed_transactions)
         lengthofblocktransactions = len(block['data'])
-        if lengthofunconfirmedtransactions < lengthofblocktransactions:
+        if lengthofunconfirmedtransactions > lengthofblocktransactions:
             new_chain = self.read_data(DB)
             sizeCheck = self.recevBlockCheckSize(block=block)
             new_chain.append(block)
