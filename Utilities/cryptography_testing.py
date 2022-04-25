@@ -24,7 +24,7 @@ class Algs():
 		self.amount = 100
 
 	
-	def difficulty_increase(self, chain:list, nodes):
+	def difficulty_increase(self, chain:list, nodes_list):
 		""" difficulty of a block """
  
 		self.list_count = ['0']
@@ -37,7 +37,8 @@ class Algs():
 				self.amount = self.amount / 2
 				if len(self.list_count) != 9:
 					self.list_count.append('0')
-		for node in nodes:
+		for nodes in nodes_list:
+			node = nodes['node']
 			test = r.get(f'http://{node}/get_the_chain')
 			if test.status_code == 200:
 				number_of_nodes = number_of_nodes + 1

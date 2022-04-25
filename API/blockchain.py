@@ -185,9 +185,10 @@ class Blockchain:
 
     def post_chain(self, block):
         """ sends the new block to all nodes """
-        for node['node'] in self.nodes:
+        for nodes in self.nodes:
+            node = nodes['node']
             chain = block
-            json = {'blockchain':chain}
+            json = {'block':chain}
             url = r.post(f'http://{node}/insert_block', json)
             url_status = url.status_code
             print(f"http://{node}/insert_block \n{url_status}")
@@ -227,7 +228,7 @@ class Blockchain:
             if chain == self.chain:
                 hash_op = hashlib.sha256(str(new_proof**2 -
                 previous_proof**2).encode()).hexdigest()
-                work = algs.difficulty_increase(chain=self.chain, nodes=self.nodes)
+                work = algs.difficulty_increase(self.chain, self.nodes)
                 if hash_op[:len(work)] == algs.difficulty:
                     check_proof = True
                 else:
@@ -407,7 +408,8 @@ class Blockchain:
 
     def broadcast_transaction(self, transaction):
         """ sends list of unconfirmed transactions to all nodes """
-        for node in self.nodes:
+        for nodes in self.nodes:
+            node = nodes['node']
             url = f'http://{node}/add_transaction/'
             json = {'transaction': transaction}
             r.post(url, json)
@@ -618,7 +620,8 @@ class Blockchain:
             current_transactions = self.transactions
             updated_transactions = []
             length_current = len(self.chain)
-            for node in network:
+            for nodes in network:
+                node = nodes['node']
                 node_transactions = r.get(f'http://{node}/get_the_chain').json()
                 is_valid = self.is_chain_valid(node_transactions)
                 if is_valid != True:
