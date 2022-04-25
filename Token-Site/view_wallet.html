@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wallet Balance</title>
+    <link rel="stylesheet" href="static/styles/cube.css" rel="stylesheet">
+</head>
+<body>
+    <div class="Dropdown">
+        <button>Menu</button>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mining.html">Mining</a></li>
+            <li><a href="https://github.com/C3ald/Wallet-App.git">Transact</a></li>
+            <li><a href="make_keys_template.html">Make a Wallet</a></li>
+        </ul>
+    </div>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('button').click(function(){
+            $('ul').toggleClass('active')
+        })
+    })
+</script>
+<div class="background">
+        <section></section>
+        <script src="static/js/squares.js"></script>
+</div>
+    <div class="app">
+        <div class="space">
+        <div class="cube">
+            <div class="side s1"><h3>Wallet info</h3></div>
+            <div class="side s2"></div>
+            <div class="side s3"></div>
+            <div class="side s4"></div>
+            <div class="side s5"></div>
+            <div class="side s6"></div>
+            <div class="content"><p>Wallet balance: {{ wallet['balance'] }} Tokens</p>
+                                 <p> Public key: {{ wallet['publickey'] }}</p>
+                                 <p>&nbsp;</p>
+                                 <p>&nbsp;</p>
+                                 <p>&nbsp;</p>
+                                 <p>&nbsp;</p>
+                                 <p>&nbsp;</p>
+    </div>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

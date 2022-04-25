@@ -1,0 +1,3 @@
+Each node will vote on a random node to make the new block and the node with the most votes will forge
+the next block.
+The chosen node will then pick a random wallet using the proof of stake algorithm and that wallet will forge the next block.

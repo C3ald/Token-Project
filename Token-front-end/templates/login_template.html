@@ -1,0 +1,59 @@
+<html>
+
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/styles/transaction.css')}}">
+    <!-- for navbar<link rel="stylesheet" href="{{ url_for('static', filename='/styles/navagationbar.css')}}"> -->
+</head>
+
+<body>
+    <!-- for navbar    <div class="nav">
+        <ul class="nav-container">
+            <div class="nav-content">
+            <li><a href="{{ url_for('index')}}">Home</a></li>
+            <li><a href="{{ url_for('about')}}">About</a></li>
+            
+            <
+            <li><a href="{{ url_for('mining')}}">Mining</a></li>
+            </div>
+        </ul>
+    </div>  -->
+
+    <div class="Dropdown">
+        <div class="menu"><button>Menu</button></div>
+        <ul>
+            <li><a href="{{url_for('index')}}">Home</a></li>
+            <li><a href="{{url_for('mining')}}">Mining</a></li>
+            <li><a href="https://github.com/C3ald/Wallet-App.git">Transact</a></li>
+            <li><a href="{{url_for('makekeys')}}">Make a Wallet</a></li>
+            <li><a href="{{url_for('login')}}">login</a></li>
+
+        </ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.menu').click(function () {
+                $('ul').toggleClass('active')
+            })
+        })
+    </script>
+{% block content %}{% endblock %}
+
+
+
+
+</body>
+
+</html>
+<!-- <script>
+// Get the modal
+var modal = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script> -->
