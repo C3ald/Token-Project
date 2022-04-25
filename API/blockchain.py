@@ -196,7 +196,7 @@ class Blockchain:
         for nodes in self.nodes:
             node = nodes['node']
             json = {"block": block}
-            url = r.post(f'http://{node}/insert_block', json)
+            url = r.post(f'http://{node}/insert_block', json=json)
             url_status = url.status_code
             print(f"http://{node}/insert_block {url_status}")
         return 'chain is updated among all nodes'
@@ -410,7 +410,7 @@ class Blockchain:
             node = nodes['node']
             url = f'http://{node}/add_transaction/'
             json = {'transaction': transaction}
-            r.post(url, json)
+            r.post(url, json=json)
 
     def add_transaction(self, senderprivatekey: str, senderviewkey: str, sendersendpublickey, receiver, amount: float, transactionID: str):
         """ This is used to add transactions so they can be verified """
@@ -617,8 +617,7 @@ class Blockchain:
             for nodes in network:
                 node = nodes['node']
                 try:
-                    node_transactions = r.get(
-                    f'http://{node}/get_the_chain').json()
+                    node_transactions = r.get(f'http://{node}/get_the_chain').json()
                     is_valid = self.is_chain_valid(node_transactions)
                     if is_valid != True:
                         continue
