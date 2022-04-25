@@ -373,6 +373,7 @@ async def check_balance(wallet:Wallet_public):
 async def insert_chain(chain:Block):
     """ replace the chain if all nodes are down or if node has a 
     firewall preventing get requests from web servers """
+    print(chain)
     updated_chain = blockchain.update_chain(chain.block)
     return updated_chain
 
