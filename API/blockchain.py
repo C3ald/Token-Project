@@ -176,7 +176,8 @@ class Blockchain:
         self.chain.append(block)
         self.add_data(data=self.chain, DataBase=DB)
         print(block)
-        self.post_chain(block)
+        if len(self.chain) > 1:
+            self.post_chain(block)
         return block
 
     def get_prev_block(self):
