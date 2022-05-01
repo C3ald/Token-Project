@@ -1,0 +1,43 @@
+<h1>Playground</h1>
+
+<!-- <div id="chart">
+
+</div>
+<div id="usertable">
+	<table>
+		<tr>
+			<th>Username</th>
+		</tr>
+		{% for user in users %}
+		<tr>
+			<td>{{ user.username }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</div> -->
+<!-- <div class="user_balance">
+	<h1>Check User Balance</h1>
+
+</div> -->
+<div id="chart">
+	
+</div>
+
+
+
+
+<script>
+	var ws = new WebSocket("ws://localhost:8000/dashboard");
+	
+	ws.onopen = function (event){
+		ws.send("hello from client");
+	};
+
+	ws.onmessage = function (event){
+		var data = JSON.parse(event.data);
+		document.getElementById("chart").innerHTML = data;
+		console.log(event.data);
+		console.log(data);
+	};
+	
+</script>

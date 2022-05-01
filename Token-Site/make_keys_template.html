@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Make a wallet</title>
+        <link rel="stylesheet" href="static/styles/makekeys.css">
+    </head>
+    <body>
+
+        <div id="blur">
+        <div id="particles-js"></div>
+            <div class="Buttons">
+                <a href="#" onclick="toggle()">Make Wallet</a>
+                <!-- <a href="login_template.html">See Wallet</a> -->
+                <a href="mining.html">Mining</a>
+                <a href="https://github.com/C3ald/Wallet-App.git">Transactions</a>
+                <a href="index.html">Home</a>
+                <a href="becomenode_template.html">become a node</a>
+            </div> 
+        </div> 
+        <div id="popup">          
+            <h2>To make a wallet, Download the Token Wallet app from github by clicking the link </h2> 
+            <p>"https://github.com/C3ald/Wallet-App.git"</p>
+            <a href="#" onclick="toggle()">dismiss</a>
+        </div>
+    </body>
+                <script type="text/javascript">
+            function toggle(){
+                var blur = document.getElementById('blur')
+                blur.classList.toggle('active')
+                var popup = document.getElementById('popup')
+                popup.classList.toggle('active')
+            }
+            </script>
+        <script type="text/javascript" src="static/js/particles.js"></script>
+        <script type="text/javascript" src="static/js/particlesapp.js"></script>
+</html>

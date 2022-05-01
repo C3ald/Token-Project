@@ -1,0 +1,8 @@
+setup.py
+token_cli.py
+token_cli.egg-info/PKG-INFO
+token_cli.egg-info/SOURCES.txt
+token_cli.egg-info/dependency_links.txt
+token_cli.egg-info/entry_points.txt
+token_cli.egg-info/requires.txt
+token_cli.egg-info/top_level.txt

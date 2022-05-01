@@ -1,0 +1,12 @@
+LinuxVenv
+linuxvenv
+*.json
+__pycache__
+.vscode
+.encrypted
+windowsvenv
+randomX
+*.pem
+*.key
+*.csr
+nodes.txt

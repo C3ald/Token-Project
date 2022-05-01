@@ -1,0 +1,3 @@
+[console_scripts]
+token_cli = token_cli:cli
+

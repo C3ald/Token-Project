@@ -1,0 +1,17 @@
+{% extends 'login_template.html' %}
+
+    {% block content %}
+    <div class="container">
+        <div class="form">
+            <h2>check wallet balance</h2>
+            <form action="{{url_for('login')}}" method="POST">
+                <div class="inputbox">
+                    <input type="text" name="publickey" id="publickey" placeholder="publickey">
+                </div>
+                <div class="inputbox">
+                    <input type="submit" value="submit" name="submit" id="submit">
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endblock %}

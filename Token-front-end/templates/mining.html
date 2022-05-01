@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>how to mine Token</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='/styles/mining.css')}}">
+	</head>
+	<body>
+    <div class="Dropdown">
+        <button>Menu</button>
+        <ul>
+            <li><a href="{{url_for('index')}}">Home</a></li>
+            <li><a href="{{url_for('mining')}}">Mining</a></li>
+            <li><a href="https://github.com/C3ald/Wallet-App.git">Transact</a></li>
+            <li><a href="{{url_for('makekeys')}}">Make a Wallet</a></li>
+            <li><a href="{{url_for('login')}}">view wallet</a></li>
+
+        </ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('button').click(function(){
+                $('ul').toggleClass('active')
+            })
+        })
+    </script>		
+		<div class="bg">
+        		<div class="container">
+       	     		<button onclick="bggen()">Useless Button</button>
+        </div>
+        <script src="{{ url_for('static', filename='/js/anime.min.js')}}"></script>
+        <script>
+            const container = document.querySelector
+            ('.container');
+            for ( var i = 1; i<=50; i++){
+                const blocks = document.createElement('div')
+                blocks.classList.add('block');
+                container.appendChild(blocks);
+            }
+
+            function bggen(){
+                anime({
+                    targets: '.block',
+                    translateX : function(){
+                        return anime.random(-700,1400)
+                    },
+                        translateY : function(){
+                        return anime.random(-700,700)
+                    },
+                    scale: function(){
+                        return anime.random(1,6)
+                    }
+                })
+            }
+
+            bggen()
+        </script>
+        </div>
+		<div class="container">
+			<div class="box">
+				<span></span>
+				<div class="content">
+					<h2>Method One</h2>
+					<p>The first method you can gain Tokens
+						is to mine them by using a program that you can download
+						by using the button below, you must become a node before you can start mining:
+					</p>
+					<a href="https://github.com/C3ald/Wallet-App.git">Mine Token!</a>
+				</div>
+			</div>
+			<div class="box">
+				<span></span>
+				<div class="content">
+					<h2>Method Two</h2>
+					<p>The second way to get Tokens is to buy it from someone.
+					</p>
+				</div>
+			</div>
+
+	</body>
+</html>
