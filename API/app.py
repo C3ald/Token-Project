@@ -246,10 +246,10 @@ async def add_unconfirmed_transaction(transaction: Transaction):
     
     receiver = transaction.receiver
     amount = transaction.amount
-    new_transaction = blockchain.add_unconfirmed_transaction(senderprivatekey=senderprivatesendkey, 
-    sendersendpublickey=senderpublicsendkey, 
+    new_transaction = blockchain.add_unconfirmed_transaction(
+    sender=pub_sender_key, 
     receiver=receiver, 
-    senderviewkey=senderviewkey, 
+    sendersignature=sender_signature, 
     amount=amount)
     blockchain.broadcast_transaction(transaction=new_transaction)
     result = 'transaction has been added and is awaiting verification'
