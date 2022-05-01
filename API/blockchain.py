@@ -376,18 +376,18 @@ class Blockchain:
             json = {'transaction': transaction}
             r.post(url, json=json)
 
-    def add_transaction(self, sendersignature: str, senderviewkey: str, sendersendpublickey, receiver, amount: float, transactionID: str):
+    def add_transaction(self, sendersignature: str, sendersendpublickey, receiver, amount: float, transactionID: str):
         """ This is used to add transactions so they can be verified """
 
         return unconfirmedTransaction
 
     """ to prevent loops in the network when adding transactions """
 
-    def add_unconfirmed_transaction(self, sendersignature: str, senderviewkey: str, sendersendpublickey, receiver, amount: float):
+    def add_unconfirmed_transaction(self, sendersignature: str, sendersendpublickey, receiver, amount: float):
         """ This is used to add transactions so they can be verified """
 
         unconfirmedTransaction = {'sender send publickey': sendersendpublickey, 'sender send privatekey': senderprivatekey,
-                                  'sender address': senderviewkey, 'receiver': receiver, 'amount': amount, 'id': str(uuid4()), 'timestamp': time.time(), 'type': 'Transaction'}
+                                   'receiver': receiver, 'amount': amount, 'id': str(uuid4()), 'timestamp': time.time(), 'type': 'Transaction'}
         verify = self.doubleSpendCheck(unconfirmedTransaction)
         if verify == False:
             self.unconfirmed_transactions.append(unconfirmedTransaction)

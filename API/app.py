@@ -86,11 +86,7 @@ blockchain = Blockchain()
 
 class Transaction(BaseModel):
     sender_public_send_key: str
-    sender_private_send_key: str
-<<<<<<< HEAD
-=======
-    sender_view_key: str
->>>>>>> refs/remotes/origin/master
+    sender_signature: str
     receiver: str
     amount: float
 
@@ -98,11 +94,7 @@ class Transaction(BaseModel):
 
 class AddTransaction(BaseModel):
     sender_public_send_key: str
-    sender_private_send_key: str
-<<<<<<< HEAD
-=======
-    sender_view_key: str
->>>>>>> refs/remotes/origin/master
+    sender_signature: str
     receiver: str
     transactionID: str
     timestamp: str
@@ -112,11 +104,6 @@ class AddTransaction(BaseModel):
 
 class Contract(BaseModel):
     sender_public_send_key: str
-    sender_private_send_key: str
-<<<<<<< HEAD
-=======
-    sender_view_key: str
->>>>>>> refs/remotes/origin/master
     receiver: str
     contractbinary: bytes
 
@@ -230,15 +217,13 @@ async def is_valid():
 async def add_transaction(transaction: AddTransaction):
     """ the route for nodes to add transactions to this node to prevent loops in the network. """
     senderpublicsendkey = transaction.sender_public_send_key
-    senderprivatesendkey = transaction.sender_private_send_key
-    senderviewkey = transaction.sender_view_key
+    sender_signature = transaction.sender_signature
     receiver = transaction.receiver
     amount = transaction.amount
     transactionid = transaction.transactionID
     new_transaction = blockchain.add_transaction(
-        senderprivatekey=senderprivatesendkey,
+        sender_signature=sender_signature,
         sendersendpublickey=senderpublicsendkey,
-        senderviewkey=senderviewkey,
         receiver=receiver,
         amount=amount,
         transactionID=transactionid
@@ -255,15 +240,11 @@ async def add_transaction(transaction: AddTransaction):
 @app.post('/add_unconfirmed_transaction', tags=['transaction'])
 async def add_unconfirmed_transaction(transaction: Transaction):
     """ broadcasts transactions to all nodes """
-<<<<<<< HEAD
-    private_key = transaction.sender_private_send_key
+
+    sender_signature = transaction.sender_signature
     pub_sender_key = transaction.sender_public_send_key
     signature = create_keys.make_signature
     
-=======
-    senderpublicsendkey = transaction.sender_public_send_key
-    senderprivatesendkey = transaction.sender_private_send_key
-    senderviewkey = transaction.sender_view_key
     receiver = transaction.receiver
     amount = transaction.amount
     new_transaction = blockchain.add_unconfirmed_transaction(senderprivatekey=senderprivatesendkey, 
@@ -272,7 +253,6 @@ async def add_unconfirmed_transaction(transaction: Transaction):
     senderviewkey=senderviewkey, 
     amount=amount)
     blockchain.broadcast_transaction(transaction=new_transaction)
->>>>>>> refs/remotes/origin/master
     result = 'transaction has been added and is awaiting verification'
     return result
 
