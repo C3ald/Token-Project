@@ -27,7 +27,6 @@ ring_ct = Ring_CT()
 decoy_transactions = Decoy_addresses()
 DB = TinyDB('db_blockchain.json')
 NODES = TinyDB('nodes.json')
-signature = Signatures()
 wallet_bal = Check_Wallet_Balance()
 
 
@@ -154,12 +153,6 @@ class Blockchain:
         """ get the previous block on the current blockchain """
         return self.chain[-1]
 
-    def signaturecheck(self, transaction):
-        supposed_sign = wallet_bal.sign_transactions(transaction)
-        actual_sign = transaction['sender signature'] + '$pbkdf2-sha256$29000$'
-        verified = wallet_bal.verify_keys(
-            publickey=actual_sign, privatekey=supposed_sign)
-        return verified
 
     def post_chain(self, block):
         """ sends the new block to all nodes """

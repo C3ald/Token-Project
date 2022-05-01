@@ -13,7 +13,7 @@ from encryption import Encrypt_and_Decrypt
 import os
 import asyncio
 from multiprocessing import Process
-
+from Wallets import Signatures, Wallet_generation
 #Constants
 APP = app
 SERVER_NAME = 'Token Network'
@@ -85,17 +85,13 @@ def get_chain():
 def create_keys(password, file_name):
 	""" pulls private key, password, and publickey """
 	wallet = Make_Keys().make_spend_view_receive_keys()
-	public_spend = wallet['public spend key']
-	private_spend = wallet['private spend key']
-	view_key = wallet['view key']
-	primary_address = wallet['primary address']
-	seed = wallet['seed for wallet']
+	public_spend = wallet['public key']
+	private_spend = wallet['private key']
 	key = password
-	file = ENCRYPT_AND_DECRYPT.write_to_file(file_name, data=f'public spend key: {public_spend} \nprivate spend key: {private_spend} \nview key: {view_key} \nprimary address: {primary_address} \nwallet seed: {seed}')
+	file = ENCRYPT_AND_DECRYPT.write_to_file(file_name, data=f'public key: {public_spend} \nprivate key: {private_spend} \n')
 	encrypt_file = ENCRYPT_AND_DECRYPT.encrypt_file(password=key, file=file)
 	os.remove(file)
-	click.echo(f"\n \nPublic Key: {wallet['public spend key']}\n \nPrivate Key: {wallet['private spend key']}\n \nView key: {wallet['view key']}\n \nPrimary address: {wallet['primary address']}\n \nSeed for wallet: {wallet['seed for wallet']} \n file containing wallet: {encrypt_file}")
-
+	click.echo(f'public key: {public_spend} \nprivate key: {private_spend} \n')
 
 
 @click.command()
@@ -109,6 +105,18 @@ def decrypt_wallet(password, file_name):
 	print(' ')
 	print(' ')
 	click.echo(decrypted_file)
+
+
+
+@click.command()
+@click.option('--private-key', prompt='private key for your wallet', help='private key for signing transactions')
+@click.command('--receiver', prompt='who are you sending to', help='receiver public key')
+def sign_transaction(private_key, receiver):
+	""" Generates a signature for transaction """
+	signs = Signatures()
+	signature = sign.sign(receiver, private_key)
+	click.echo(signature)
+
 
 
 @click.command()
