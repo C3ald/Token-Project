@@ -38,13 +38,18 @@ class Algs():
 				if len(self.list_count) != 9:
 					self.list_count.append('0')
 		for nodes in nodes_list:
-			node = nodes['node']
-			test = r.get(f'http://{node}/get_the_chain')
-			if test.status_code == 200:
-				number_of_nodes = number_of_nodes + 1
-		for x in range(number_of_nodes):
-			if number_of_nodes != 0 and x % 100000 == 0:
-				interval = interval + 1.001
+			try:
+				node = nodes['node']
+				test = r.get(f'http://{node}/get_the_chain')
+				if test.status_code == 200:
+					number_of_nodes = number_of_nodes + 1
+			except:
+				None
+			for x in range(number_of_nodes):
+				if number_of_nodes != 0 and x % 100000 == 0:
+					interval = interval + 1.001
+			
+			
 		if interval != 0:
 			self.amount = self.amount / interval
 

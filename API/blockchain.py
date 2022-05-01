@@ -14,7 +14,7 @@ import json
 from urllib.parse import urlparse
 from uuid import uuid1, uuid4
 import requests as r
-
+from urllib import error
 import random
 from passlib.hash import pbkdf2_sha256
 import base64
@@ -120,7 +120,7 @@ class Blockchain:
     def create_block(self, proof, previous_hash, forger, timestamp=str(time.time())):
         """ Used to make a block and when a block is being made the transactions are verified, invalid transactions are removed from the list of 
         transactions, the list of transactions resets. When the block is added it is announced to all the nodes as a new block """
-        if len(self.chain) > 2:
+        if len(self.chain) > 1:
             valid = self.suspendAlgorithm(forger)
             if valid == False:
                 self.new_transactions = []
@@ -164,11 +164,14 @@ class Blockchain:
     def post_chain(self, block):
         """ sends the new block to all nodes """
         for nodes in self.nodes:
-            node = nodes['node']
-            json = {"block": block}
-            url = r.post(f'http://{node}/insert_block', json=json)
-            url_status = url.status_code
-            print(f"http://{node}/insert_block {url_status}")
+            try:
+                node = nodes['node']
+                json = {"block": block}
+                url = r.post(f'http://{node}/insert_block', json=json)
+                url_status = url.status_code
+                print(f"http://{node}/insert_block {url_status}")
+            except:
+                None
         return 'chain is updated among all nodes'
 
     def update_chain(self, block: dict):
@@ -303,7 +306,7 @@ class Blockchain:
         transactionforsigning = {'sender': senders, 'amount': amount,
                                  'receiver': receivers, 'id': transactionID, 'timestamp': timestamp}
 
-        transaction = self.signTransaction(transactionforsigning)
+        transaction = transactionforsigning
         signsender = transaction
 
         minertransaction = {'sender': senders, 'amount': amount, 'receiver': receivers,
@@ -495,7 +498,8 @@ class Blockchain:
                     if response.status_code != 200:
                         longest_chain = self.chain
                         max_length = len(self.chain)
-
                 except:
-                    pass
+                    longest_chain = self.chain
+
+
             return False
