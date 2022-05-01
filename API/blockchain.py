@@ -18,7 +18,7 @@ import requests as r
 import random
 from passlib.hash import pbkdf2_sha256
 import base64
-
+from Wallets import Signatures
 # git add .
 # git commit -m "Message"
 # git push
@@ -28,7 +28,7 @@ decoy_transactions = Decoy_addresses()
 DB = TinyDB('db_blockchain.json')
 NODES = TinyDB('nodes.json')
 wallet_bal = Check_Wallet_Balance()
-
+signatures = Signatures()
 
 class Blockchain:
     """ the blockchain class """
@@ -120,7 +120,7 @@ class Blockchain:
     def create_block(self, proof, previous_hash, forger, timestamp=str(time.time())):
         """ Used to make a block and when a block is being made the transactions are verified, invalid transactions are removed from the list of 
         transactions, the list of transactions resets. When the block is added it is announced to all the nodes as a new block """
-        if len(self.chain) > 0:
+        if len(self.chain) > 2:
             valid = self.suspendAlgorithm(forger)
             if valid == False:
                 self.new_transactions = []
@@ -129,10 +129,17 @@ class Blockchain:
                 transactionlist = []
                 if len(self.chain) > 0:
                     for transaction in self.unconfirmed_transactions:
-                        # verify transactions and add one for the miner
+                        # verify transactions and add transaction for the miner
+                        valid = self.verify_transactions(transaction)
+                        if valid == True:
+                            self.transactions.append(transaction)
+                        else:
+                            self.removeTransaction(transaction)
+            
 
             else:
                 return 'Address cannot forge block due to it being in the receiving end of a transaction in the most recent 20 blocks'
+            self.add_miner_transaction('network', forger, miner_reward)
 
         block = {
             'index': len(self.chain) + 1,
@@ -313,7 +320,8 @@ class Blockchain:
         """ checks for double spending in the block"""
         verify = self.equals(transaction)
         verify2 = self.timeStampCheck(transaction)
-        if verify == True or verify2 == True:
+        verify3 = self.duplicate_id_in_chain(transaction)
+        if verify == True or verify2 == True or verify3 == True:
             return True
         return False
 
@@ -325,6 +333,18 @@ class Blockchain:
             if transactionID == unconfirmedtransactionID:
                 return True
         return False
+    
+    def duplicate_id_in_chain(self, transaction):
+        """ Checks the transaction id in the whole blockchain """
+        unconfirmed_id = transaction['id']
+        for block in self.chain:
+            for valid_transaction in block['data']:
+                for valid_id in valid_transaction['id']:
+                    if unconfirmed_id == valid_id:
+                        return True
+        return False
+
+
 
     def timeStampCheck(self, transaction):
         """ Checks for a reapeat timestamp in the transaction """
@@ -369,14 +389,14 @@ class Blockchain:
             json = {'transaction': transaction}
             r.post(url, json=json)
 
-    def add_transaction(self, sendersignature: str, sendersendpublickey, receiver, amount: float, transactionID: str):
+    def add_transaction(self, sendersignature: str, sender, receiver, amount: float, transactionID: str):
         """ This is used to add transactions so they can be verified """
 
         return unconfirmedTransaction
 
     """ to prevent loops in the network when adding transactions """
 
-    def add_unconfirmed_transaction(self, sendersignature: str, sendersendpublickey, receiver, amount: float):
+    def add_unconfirmed_transaction(self, sendersignature: str, sender, receiver, amount: float):
         """ This is used to add transactions so they can be verified """
 
         unconfirmedTransaction = {'sender send publickey': sendersendpublickey, 'sender send privatekey': senderprivatekey,
@@ -389,6 +409,15 @@ class Blockchain:
 
     def verify_transactions(self, transaction):
         """ verifies transactions on the blockchain """
+        sender = transacton['sender']
+        receiver = transaction['receiver']
+        signature_of_sender = transaction['signature']
+        transaction_signature_is_valid = signatures.verify(public_key=sender, receiver=receiver, signature=signature_of_sender)
+        double_spend = self.doubleSpendCheck(transaction)
+        if double_spend == False and transaction_signature_is_valid == True:
+            return True
+        else:
+            return False
 
 
 

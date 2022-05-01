@@ -126,51 +126,7 @@ class Ring_CT():
 
 
 
-<<<<<<< HEAD
 
-=======
-class Signatures():
-	def __init__(self):
-		pass
-	
-	def gatherSendersAndReceivers(self, fulltransaction):
-		""" Gathers the senders and receivers to turn it into a signature for the block """
-		allsenders = fulltransaction['sender']
-		allreceivers = fulltransaction['receiver']
-		transactionID = [fulltransaction['id']]
-		timestamp = [fulltransaction['timestamp']]
-		data = allsenders + allreceivers + transactionID + timestamp
-		return data
-	
-	def makeSignatures(self, data):
-		""" Uses the data to make a signature """
-		combined_data = ''
-		for info in data:
-			combined_data = str(combined_data + str(info))
-		return combined_data
-	
-	def hashSignature(self, combined_data):
-		""" hashes the combined data """
-		salt = b'\xef\x94\x06r\x05\xb6M\xa0\x85\x9e\x17k\x8a;v\xa7\x91v\x19l!\xf6&vo\xd1l\xe1X\x05\xe7\x98'
-		encodedAddress = bytes(combined_data.encode())
-		hashedAddress = hashlib.scrypt(encodedAddress, salt=salt, n=4, r=7, p=10).hex()
-		shadata = hashlib.sha256(hashedAddress.encode()).hexdigest()
-		return shadata
-	
-	def encodeSignature(self, shadata):
-		""" hashes the signature asymmetrically  """
-		finalencodedAddress = str(pbkdf2_sha256.hash(shadata))
-		finalencodedAddress = finalencodedAddress.replace('$pbkdf2-sha256$29000$', '')
-		return finalencodedAddress
-
-	def signTransaction(self, transaction):
-		""" Signs the transaction """
-		gathered_data = self.gatherSendersAndReceivers(transaction)
-		combined_data = self.makeSignatures(gathered_data)
-		hasheddata = self.hashSignature(combined_data)
-		hasheddata = self.encodeSignature(hasheddata)
-		return hasheddata
->>>>>>> refs/remotes/origin/master
 
 
 
@@ -201,11 +157,7 @@ class primary_addresses():
 
 
 
-<<<<<<< HEAD
 
-
-
-=======
 class Make_Keys():
 	""" creates wallet keys or addresses """
 	def __init__(self):
@@ -235,7 +187,7 @@ class Make_Keys():
 		return stealth_address
 
 	
->>>>>>> refs/remotes/origin/master
+
 class Check_Wallet_Balance():
 	""" Checks Balance and the validity of wallet addresses """
 	def __init__(self):
@@ -368,11 +320,9 @@ class Check_Wallet_Balance():
 		
 		try:
 			verify = pbkdf2_sha256.verify(privatekey, full_publickey)
-<<<<<<< HEAD
-		except:
-=======
+
 		except ValueError or TypeError or KeyError or EncodingWarning:
->>>>>>> refs/remotes/origin/master
+
 			verify = False
 		return verify
 
