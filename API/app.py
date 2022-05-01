@@ -243,7 +243,6 @@ async def add_unconfirmed_transaction(transaction: Transaction):
 
     sender_signature = transaction.sender_signature
     pub_sender_key = transaction.sender_public_send_key
-    signature = create_keys.make_signature
     
     receiver = transaction.receiver
     amount = transaction.amount

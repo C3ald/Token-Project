@@ -32,8 +32,8 @@ ENCRYPT_AND_DECRYPT = Encrypt_and_Decrypt()
 delay = 0.1
 
 def run_uvi(ip, port):
-	os.system('openssl req -new -x509 -key privkey.pem -out cert.pem -days 1095')
-	uvicorn.run(app, host=ip, port=port, reload=False, ssl_keyfile="./key.pem", ssl_certfile="./cert.pem")
+	#os.system('openssl req -new -x509 -key privkey.pem -out cert.pem -days 1095')
+	uvicorn.run(app, host=ip, port=port, reload=False, )
 
 
 async def run_app(ip, port):

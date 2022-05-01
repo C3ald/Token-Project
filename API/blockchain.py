@@ -19,6 +19,7 @@ import random
 from passlib.hash import pbkdf2_sha256
 import base64
 from Wallets import Signatures
+from multiprocessing import Process
 # git add .
 # git commit -m "Message"
 # git push
@@ -120,7 +121,7 @@ class Blockchain:
     def create_block(self, proof, previous_hash, forger, timestamp=str(time.time())):
         """ Used to make a block and when a block is being made the transactions are verified, invalid transactions are removed from the list of 
         transactions, the list of transactions resets. When the block is added it is announced to all the nodes as a new block """
-        if len(self.chain) > 1:
+        if len(self.chain) > 0:
             valid = self.suspendAlgorithm(forger)
             if valid == False:
                 self.new_transactions = []
@@ -153,7 +154,8 @@ class Blockchain:
         self.add_data(data=self.chain, DataBase=DB)
         print(block)
         if len(self.chain) > 1:
-            self.post_chain(block)
+            thread = Process(target=self.post_chain, args=(block, ))
+            thread.start()
         return block
 
     def get_prev_block(self):
@@ -310,7 +312,7 @@ class Blockchain:
         signsender = transaction
 
         minertransaction = {'sender': senders, 'amount': amount, 'receiver': receivers,
-                            'sender signature': signsender, 'id': transactionID, 'timestamp': timestamp, 'type': 'Transaction'}
+                            'sender signature': 'Network', 'id': transactionID, 'timestamp': timestamp, 'type': 'Transaction'}
         self.transactions.append(minertransaction)
         previous_block = self.get_prev_block()
         return previous_block['index'] + 1
