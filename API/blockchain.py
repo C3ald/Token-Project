@@ -27,7 +27,6 @@ ring_ct = Ring_CT()
 decoy_transactions = Decoy_addresses()
 DB = TinyDB('db_blockchain.json')
 NODES = TinyDB('nodes.json')
-UNconfirmed_transactions = TinyDB('unconfirmed_transactions.json')
 signature = Signatures()
 wallet_bal = Check_Wallet_Balance()
 
@@ -131,36 +130,8 @@ class Blockchain:
                 transactionlist = []
                 if len(self.chain) > 0:
                     for transaction in self.unconfirmed_transactions:
-                        validtransaction = self.verify_transactions(transaction)
-                        if validtransaction != None:
-                            self.transactions.append()
-                    if len(self.transactions) > 0:
-                        blocksizelimit = False
-                        for transaction in self.transactions:
-                            if blocksizelimit(transactionlist) == False:
-                                hashed_sender = transaction['sender']
+                        # verify transactions and add one for the miner
 
-                                hashed_receiver = transaction['receiver']
-                                signature = str(
-                                    transaction['sender signature'])
-                                transactionid = str(transaction['id'])
-                                timestamp = str(transaction['timestamp'])
-
-                                sender_sign = ring_ct.ring_sign(
-                                    blockchain=self.chain, primary_address=hashed_sender)
-                                receiver_sign = ring_ct.ring_sign(
-                                    blockchain=self.chain, primary_address=hashed_receiver)
-                                amount = transaction['amount']
-                                new_transaction = {'sender': sender_sign, 'amount': amount, 'receiver': receiver_sign,
-                                                   'sender signature': signature, 'id': transactionid, 'timestamp': timestamp}
-                                transactionlist.append(new_transaction)
-                                self.new_transactions.append(new_transaction)
-                                self.transactions = self.new_transactions
-                            else:
-                                break
-                    sender = Decoy_addresses().decoy_keys()['publickey']
-                    self.add_miner_transaction(
-                        sender=sender, receiver=forger, amount=miner_reward)
             else:
                 return 'Address cannot forge block due to it being in the receiving end of a transaction in the most recent 20 blocks'
 
@@ -343,13 +314,6 @@ class Blockchain:
 
     def checkTransactions(self, block):
         """ checks if a transaction is in new block """
-        numOfTransactionsInBlock = 0
-        for transaction in block['data']:
-            verify1 = self.equals(transaction)
-            verify2 = self.signaturecheck(transaction)
-            if verify1 == True and verify2 == True:
-                self.unconfirmed_transactions.remove(transaction)
-                numOfTransactionsInBlock = numOfTransactionsInBlock + 1
         return numOfTransactionsInBlock
 
     def doubleSpendCheck(self, transaction):
@@ -412,20 +376,14 @@ class Blockchain:
             json = {'transaction': transaction}
             r.post(url, json=json)
 
-    def add_transaction(self, senderprivatekey: str, senderviewkey: str, sendersendpublickey, receiver, amount: float, transactionID: str):
+    def add_transaction(self, sendersignature: str, senderviewkey: str, sendersendpublickey, receiver, amount: float, transactionID: str):
         """ This is used to add transactions so they can be verified """
-
-        unconfirmedTransaction = {'sender send publickey': sendersendpublickey, 'sender send privatekey': senderprivatekey,
-                                  'sender address': senderviewkey, 'receiver': receiver, 'amount': amount, 'id': transactionID, 'type': 'Transaction'}
-        verify = self.doubleSpendCheck(unconfirmedTransaction)
-        if verify == False:
-            self.unconfirmed_transactions.append(unconfirmedTransaction)
 
         return unconfirmedTransaction
 
     """ to prevent loops in the network when adding transactions """
 
-    def add_unconfirmed_transaction(self, senderprivatekey: str, senderviewkey: str, sendersendpublickey, receiver, amount: float):
+    def add_unconfirmed_transaction(self, sendersignature: str, senderviewkey: str, sendersendpublickey, receiver, amount: float):
         """ This is used to add transactions so they can be verified """
 
         unconfirmedTransaction = {'sender send publickey': sendersendpublickey, 'sender send privatekey': senderprivatekey,
@@ -438,66 +396,11 @@ class Blockchain:
 
     def verify_transactions(self, transaction):
         """ verifies transactions on the blockchain """
-        senderSendPublickey = transaction['sender send publickey']
-        senderSendPrivatekey = transaction['sender send privatekey']
-        senderviewkey = transaction['sender address']
-        receiver = transaction['receiver']
-        amount = transaction['amount']
-        transactionID = transaction['id']
-        timestamp = transaction['timestamp']
-        transactionType = transaction['type']
-        if transactionType == 'Contract':
-            Contract = transaction['contract']
-        else:
-            Contract = None
-        if amount > 0:
-            verify4 = True
-        else:
-            verify4 = False
-        verify1 = Check_Wallet_Balance().verify_keys(
-            publickey=senderSendPublickey, privatekey=senderSendPrivatekey)
-        verify2 = Check_Wallet_Balance().verify_keys(
-            publickey=senderviewkey, privatekey=senderSendPrivatekey)
-        address = primary_addresses().make_primary_address(senderviewkey)
-        balance = Check_Wallet_Balance().balance_check(public_view_key=senderviewkey,
-                                                       blockchain=self.chain, transaction=transaction)
-        balance = balance['balance']
-        newBalance = balance - amount
-        if verify1 == True and verify2 == True and newBalance >= 0 and verify4 == True:
-            hashed_sender = str(pbkdf2_sha256.hash(address))
-            hashed_sender = hashed_sender.replace('$pbkdf2-sha256$29000$', '')
-            hashed_receiver = str(pbkdf2_sha256.hash(receiver))
-            hashed_receiver = hashed_receiver.replace(
-                '$pbkdf2-sha256$29000$', '')
 
-            senders = ring_ct.make_ring_sign(
-                blockchain=self.chain, primary_address=hashed_sender)
-            receivers = ring_ct.make_ring_sign(
-                blockchain=self.chain, primary_address=hashed_receiver)
-            transactionforsigning = {'sender': senders, 'amount': amount,
-                                     'receiver': receivers, 'id': transactionID, 'timestamp': timestamp}
-            senderSign = self.signTransaction(transactionforsigning)
-            # receiverSign = transaction['signature of receiver']
-            if Contract == None:
-                verifiedTransaction = {'sender': hashed_sender, 'amount': amount, 'receiver': hashed_receiver,
-                                       'sender signature': senderSign, 'id': transactionID, 'timestamp': timestamp, 'type': 'Transaction'}
-            if transactionType == "Contract":
-                verifiedTransaction = {'sender': hashed_sender, 'amount': amount, 'receiver': hashed_receiver,
-                                       'sender signature': senderSign, 'id': transactionID, 'timestamp': timestamp, 'type': 'Contract', 'contract': Contract}
-            verify3 = self.doubleSpendCheck(verifiedTransaction)
-            if verify3 == False:
-                return verifiedTransaction
-            else:
 
-                self.removeTransaction(transaction)
-        else:
-            self.removeTransaction(transaction)
 
-    def signTransaction(self, full_transaction):
-        """ signs transactions """
-        transaction = full_transaction
-        full_signature = signature.signTransaction(transaction)
-        return full_signature
+
+
 
     # P2p nodes
     def removeTransaction(self, transaction):
@@ -574,78 +477,3 @@ class Blockchain:
                 except:
                     pass
             return False
-
-    def protocol_connections(self):
-        """ The Token Protocol p2p network connection algorithm"""
-        all_nodes = self.get_most_nodes()
-        interval1 = random.randint(2, len(all_nodes))
-        x = 0
-        while x != interval1:
-            self.nodes.append(random.choice(all_nodes))
-            x = x + 1
-        return self.nodes
-
-    def get_most_nodes(self):
-        """ gets some of the nodes on the network """
-        all_nodes = self.nodes
-        if len(all_nodes) < 2:
-            for node in all_nodes:
-                node_sets = r.get(f'https://{node}/show_nodes')
-                status = node_sets.status_code
-                if status == 200:
-                    all_nodes.append(node_sets.json()['nodes'])
-                    all_nodes = set(all_nodes)
-                    all_nodes = list(all_nodes)
-                for nodes in node_sets:
-                    more_nodes = r.get(f'https://{nodes}/show_nodes')
-                    if more_nodes.status_code == 200:
-                        all_nodes.append(more_nodes.json()['nodes'])
-                        all_nodes = set(all_nodes)
-                        all_nodes = list(all_nodes)
-        else:
-            return {'message': 'you must add more manually'}
-        self.allnodes = all_nodes
-        return self.allnodes
-
-    def update_transactions(self):
-        """ updates the list of transactions """
-        network = len(self.nodes)
-        if network != 0:
-            current_transactions = self.transactions
-            updated_transactions = []
-            length_current = len(self.chain)
-            for nodes in network:
-                node = nodes['node']
-                try:
-                    node_transactions = r.get(f'http://{node}/get_the_chain').json()
-                    is_valid = self.is_chain_valid(node_transactions)
-                    if is_valid != True:
-                        continue
-                    else:
-                        i = 1
-                        ii = 1
-                        iii = 0
-                        length = node_transactions['length']
-                        while length > i:
-                            while ii < len(node_transactions['blockchain'][i]['transactions']):
-                                transactions = node_transactions['blockchain'][i]['transactions']
-                                if transactions == self.chain[i][transactions]:
-                                    i = i + 1
-
-                                else:
-                                    if i - 1 == length_current:
-                                         iii = 0
-                                         while len(transactions) > iii:
-                                            if self.transactions != transactions[iii]:
-                                                self.transactions.append(
-                                                    transactions[iii])
-                                            iii = iii + 1
-                                         ii = ii + 1
-                                         return False
-                                    else:
-                                        self.replace_chain()
-                                        return True
-                except:
-                    None
-        else:
-            return {'message': 'No nodes found in node.'}
