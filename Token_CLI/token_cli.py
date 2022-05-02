@@ -33,6 +33,9 @@ delay = 0.1
 
 def run_uvi(ip, port):
 	#os.system('openssl req -new -x509 -key privkey.pem -out cert.pem -days 1095')
+	replace = Process(target=blockchain.replace_chain, args=())
+	replace.start()
+
 	uvicorn.run(app, host=ip, port=port, reload=False, )
 
 
@@ -41,6 +44,7 @@ async def run_app(ip, port):
 	global new_thread
 	new_thread = Process(target=run_uvi, args=(ip, port,))
 	new_thread.start()
+
 	await asyncio.sleep(1)
 
 	

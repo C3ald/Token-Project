@@ -59,7 +59,7 @@ class Blockchain:
             # helps with block creation
             self.create_block(proof=1, previous_hash="0",
                               forger='Network', timestamp='0')
-        self.replace_chain()
+
 
     def add_node_to_file(self):
         """ writes the nodes to a file since tinydb is being a pain """
@@ -343,10 +343,11 @@ class Blockchain:
         """ Checks the transaction id in the whole blockchain """
         unconfirmed_id = transaction['id']
         for block in self.chain:
-            for valid_transaction in block['data']:
-                for valid_id in valid_transaction['id']:
-                    if unconfirmed_id == valid_id:
-                        return True
+            if block['index'] != 1:
+                for valid_transaction in block['data']:
+                        print(valid_transaction)
+                        if unconfirmed_id == valid_transaction['id']:
+                            return True
         return False
 
 
@@ -404,7 +405,7 @@ class Blockchain:
     def add_unconfirmed_transaction(self, sendersignature: str, sender, receiver, amount: float):
         """ This is used to add transactions so they can be verified """
 
-        unconfirmedTransaction = {'sender send publickey': sendersendpublickey, 'sender send privatekey': senderprivatekey,
+        unconfirmedTransaction = {'sender send publickey': sender, 'signature':sendersignature,
                                    'receiver': receiver, 'amount': amount, 'id': str(uuid4()), 'timestamp': time.time(), 'type': 'Transaction'}
         verify = self.doubleSpendCheck(unconfirmedTransaction)
         if verify == False:

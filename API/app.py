@@ -374,9 +374,15 @@ async def insert_chain(chain:Block):
 
 
 
+def run_app():
+        uvicorn.run(app, host=SERVER_HOST, port=SERVER_PORT, reload=SERVER_RELOAD)
+        replace = Process(target=blockchain.replace_chain, args=())
+        replace.start()
+
+
 if __name__ == '__main__':
     # os.system('touch privkey.pem && touch cert.pem')
     # os.system('openssl rsa -passin pass:x -in keypair.key > privkey.pem')
     # os.system('openssl x509 -req -days 365 -signkey privkey.pem < cert.pem && rm keypair.key')
     # os.system('openssl x509 -req -days 365 -signkey privkey.pem > cert.pem')
-    uvicorn.run(app, host=SERVER_HOST, port=SERVER_PORT, reload=SERVER_RELOAD)
+    run_app()
