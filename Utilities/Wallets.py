@@ -1,6 +1,6 @@
-from Crypto.PublicKey import ECC
-from Crypto.Signature import DSS
-from Crypto.Hash import SHA512
+from Cryptodome.PublicKey import ECC
+from Cryptodome.Signature import DSS
+from Cryptodome.Hash import SHA512
 import uuid
 import string
 import random
@@ -51,6 +51,23 @@ class Signatures:
 			return True
 		except:
 			return False
+class Onion_Signatures:
+	""" Encrypts the data on the transaction """
+	def __init__(self):
+		pass
+
+	def make_signature(self, signature, blockchain):
+		""" picks a random number of signatures to add to the current one """
+		# Miner generates a random number of keys to use for encryption and the sender and the receiver encrypt their own sets of the miner's keys
+		# Miner's randomly generated keys encrypt the sender and receiver
+		# add keys used for encryption to a new part called encoding and combine the sender's publickey and the key for decrypting with it and do the same with receiver in a different set
+		# make it look like this: {'sender_encoding': sender+decryptionkey, 'receiver_encding': receiver+decryptionkey}
+
+
+	def convert_signature_to_list(self, signature):
+		list_sign = list(signature)
+		return list_sign
+
 
 
 if __name__ == '__main__':
