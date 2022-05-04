@@ -62,12 +62,12 @@ class Signatures:
 		except:
 			return False
 class Onion_Signatures:
-	""" Encrypts the data on the transaction """
+	""" Encrypts the data on the transaction by using layers of encryption """
 	def __init__(self):
 		pass
 
-	def make_signature(self, transaction):
-		""" picks a random number of signatures to add to the current one """
+	def make_onion_signature(self, transaction):
+		""" encrypts all the transaction data """
 		# Miner generates a random number of keys to use for encryption and the sender and the receiver encrypt their own sets of the miner's keys
 		# Miner's randomly generated keys encrypt the sender and receiver
 		# add keys used for encryption to a new part called encoding and combine the sender's publickey and the key for decrypting with it and do the same with receiver in a different set
@@ -76,6 +76,8 @@ class Onion_Signatures:
 		receiver = transaction['receiver']
 		amount = transaction['amount']
 		signature_of_sender = transaction['signature']
+		start_key = self.generate_new_key()
+		layers = random.randint(5, 8)
 
 
 
@@ -107,10 +109,27 @@ class Onion_Signatures:
 	# 	#to_bytes = unhexlify(to_int)
 	# 	return to_bytes.decode()
 
-	def decrypt(self, publickey:str, encrypted_data:str):
+
+	def decrypt_and_verify_data(self, encryption_key:str, encrypted_data:dict):
+		""" Decrypts the data """
+		key = unhexlify(encryption_key)
+		nonce = unhexlify(encrypted_data['nonce'])
+		cipher = AES.new(key, AES.MODE_EAX, nonce)
+		cipher_text =  unhexlify(encrypted_data['encrypted data'])
+		tag = unhexlify(encrypted_data['tag'])
+		try:
+			plain_text = cipher.decrypt_and_verify(cipher_text, tag)
+			return plain_text.decode()
+		except ValueError:
+			print('invalid')
+			None
+
+	def decrypt_encryption_key(self, publickey:str, encrypted_decryption_key_data:str):
 		encrypted_pub = hashlib.sha256(publickey.encode()).hexdigest()
-		decryption_key = encrypted_data.replace(encrypted_pub, '')
-		return decryption_key
+		decryption_key = encrypted_decryption_key_data.replace(encrypted_pub, '')
+		# key = AES.new(decryption_key, AES.MODE_EAX)
+		# plain_text = key.decrypt_and_verify(encrypted_data)
+		return decryption_key.hex()
 
 
 	def combine(self, publickey, encryption_key):
@@ -125,9 +144,14 @@ class Onion_Signatures:
 		encoded = data.encode()
 		if key == None:
 			key = self.generate_new_key()
+			decrypt_key = key
+		else:
+			decrypt_key = None
+		data = data.encode()
+		key = unhexlify(key)
 		cipher = AES.new(key, AES.MODE_EAX)
-		encrypted = cipher.encrypt_and_digest(data)
-		return encrypted
+		encrypted_data, tag = cipher.encrypt_and_digest(data)
+		return {'nonce': cipher.nonce.hex(), 'encrypted data': encrypted_data.hex(), 'tag': tag.hex(), 'key': decrypt_key}
 		
 
 
@@ -154,8 +178,11 @@ if __name__ == '__main__':
 	onion = Onion_Signatures()
 	encrypt_key = onion.generate_new_key()
 	print(encrypt_key)
-	key = onion.combine('Alice', encrypt_key)
-	print(key)
-	decrypt = onion.decrypt('Alice', key)
+	key_combined = onion.combine('Alice', encrypt_key)
+	encrypted_data = onion.encrypt('example', encrypt_key)
+	print(encrypted_data)
+	#decrypt = onion.decrypt('Alice', key)
+	decrypted_data = onion.decrypt_and_verify_data(encrypt_key, encrypted_data)
+	print(decrypted_data)
 	
-	print(decrypt)
+	#print(decrypt)
