@@ -76,8 +76,32 @@ class Onion_Signatures:
 		receiver = transaction['receiver']
 		amount = transaction['amount']
 		signature_of_sender = transaction['signature']
-		start_key = self.generate_new_key()
+		encryption_keys = []
+		
+		
 		layers = random.randint(5, 8)
+		for x in ranage(layers):
+			key = self.generate_new_key()
+			sender = str(sender)
+			receiver = str(receiver)
+			signature_of_sender = str(signature_of_sender)
+			if len(encryption_keys) == 0:
+				sender = self.encrypt(sender, key)
+				receiver = self.encrypt(receiver, key)
+				signature_of_sender = self.encrypt(signature_of_sender, key)
+
+				encrypted_data = self.encrypt(key)
+				encryption_keys.append(encrypted_data)
+			else:
+				sender = self.encrypt(sender, key)
+				receiver = self.encrypt(receiver, key)
+				signature_of_sender = self.encrypt(signature_of_sender, key)
+
+				new_key = self.generate_new_key()
+				encrypted_data = self.encrypt(key, key=new_key)
+				encryption_keys.append(encrypted_data)
+			
+
 
 
 
@@ -113,10 +137,11 @@ class Onion_Signatures:
 	def decrypt_and_verify_data(self, encryption_key:str, encrypted_data:dict):
 		""" Decrypts the data """
 		key = unhexlify(encryption_key)
-		nonce = unhexlify(encrypted_data['nonce'])
+		formated_data = self.format_data(encrypted_data['data'])
+		nonce = unhexlify(formated_data['nonce'])
 		cipher = AES.new(key, AES.MODE_EAX, nonce)
-		cipher_text =  unhexlify(encrypted_data['encrypted data'])
-		tag = unhexlify(encrypted_data['tag'])
+		cipher_text =  unhexlify(formated_data['encrypted data'])
+		tag = unhexlify(formated_data['tag'])
 		try:
 			plain_text = cipher.decrypt_and_verify(cipher_text, tag)
 			return plain_text.decode()
@@ -151,8 +176,13 @@ class Onion_Signatures:
 		key = unhexlify(key)
 		cipher = AES.new(key, AES.MODE_EAX)
 		encrypted_data, tag = cipher.encrypt_and_digest(data)
-		return {'nonce': cipher.nonce.hex(), 'encrypted data': encrypted_data.hex(), 'tag': tag.hex(), 'key': decrypt_key}
-		
+		return {'data':f'{cipher.nonce.hex()}+{encrypted_data.hex()}+{tag.hex()}', 'key':decrypt_key}
+	
+	def format_data(self, data:str):
+		result = data.split('+')
+		result = {'nonce': result[0], 'encrypted data': result[1], 'tag': result[2]}
+		return result
+
 
 
 	def generate_new_key(self):
@@ -179,6 +209,7 @@ if __name__ == '__main__':
 	encrypt_key = onion.generate_new_key()
 	print(encrypt_key)
 	key_combined = onion.combine('Alice', encrypt_key)
+	print(key_combined)
 	encrypted_data = onion.encrypt('example', encrypt_key)
 	print(encrypted_data)
 	#decrypt = onion.decrypt('Alice', key)
