@@ -66,7 +66,7 @@ class Onion_Signatures:
 	def __init__(self):
 		pass
 
-	def make_onion_signature(self, transaction):
+	def make_onion_signature(self, transaction:dict):
 		""" encrypts all the transaction data """
 		# Miner generates a random number of keys to use for encryption and the sender and the receiver encrypt their own sets of the miner's keys
 		# Miner's randomly generated keys encrypt the sender and receiver
@@ -85,21 +85,31 @@ class Onion_Signatures:
 			sender = str(sender)
 			receiver = str(receiver)
 			signature_of_sender = str(signature_of_sender)
+			sender = self.encrypt(sender, key=key)
+			receiver = self.encrypt(receiver, key=key)
 			if len(encryption_keys) == 0:
-				sender = self.encrypt(sender, key)
-				receiver = self.encrypt(receiver, key)
-				signature_of_sender = self.encrypt(signature_of_sender, key)
-
-				encrypted_data = self.encrypt(key)
-				encryption_keys.append(encrypted_data)
+				encryption_keys.append(key)
 			else:
-				sender = self.encrypt(sender, key)
-				receiver = self.encrypt(receiver, key)
-				signature_of_sender = self.encrypt(signature_of_sender, key)
+				for used_key in encryption_keys:
+					encrypted_key = self.encrypt(used_key, key)
+					encryption_keys[encryption_keys.index(used_key)] = encrypted_key
+				encryption_keys.append(key)
+		sender_set = self.combine(sender, key)
+		receiver_set = self.combine(receiver, key)
+		# encryption_keys[encryption_keys.index(key)]
+		sender_sets = encryption_keys
+		receiver_sets = encryption_keys
+		sender_sets[sender_sets.index(key)] = sender_set
+		receiver_sets[receiver_sets.index(key)] = receiver_sets
 
-				new_key = self.generate_new_key()
-				encrypted_data = self.encrypt(key, key=new_key)
-				encryption_keys.append(encrypted_data)
+		transaction['sender'] = sender
+		transaction['receiver'] = receiver
+		transaction.update({'sender set': sender_sets, 'receiver set': receiver_sets})
+		return transaction
+		
+
+
+
 			
 
 
@@ -215,5 +225,4 @@ if __name__ == '__main__':
 	#decrypt = onion.decrypt('Alice', key)
 	decrypted_data = onion.decrypt_and_verify_data(encrypt_key, encrypted_data)
 	print(decrypted_data)
-	
 	#print(decrypt)

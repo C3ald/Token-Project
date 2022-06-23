@@ -99,7 +99,6 @@ class AddTransaction(BaseModel):
     transactionID: str
     timestamp: str
     amount: float
-    transactiontype: str
 
 
 class Contract(BaseModel):
