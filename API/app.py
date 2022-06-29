@@ -340,9 +340,7 @@ async def insert_chain(chain:Block):
 
 
 
-class insert_file_part(BaseModel):
-    file_part_num: int
-    file_part: bytes
+
 
 
 # @app.post('/add_file')
@@ -352,10 +350,7 @@ class insert_file_part(BaseModel):
 #     return data
 
 
-@app.post('/insert_file_from_node')
-async def add_part(file:insert_file_part):
-    """ the route for nodes to add broken up files """
-    pass
+
 
 
 def run_app():
