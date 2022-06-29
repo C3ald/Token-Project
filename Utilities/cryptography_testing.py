@@ -1,4 +1,4 @@
-from types import NoneType
+#from types import NoneType
 from passlib.hash import pbkdf2_sha256
 import hashlib
 import random

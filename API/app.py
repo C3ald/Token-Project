@@ -3,7 +3,7 @@
 #from starlette.websockets import WebSocketDisconnect
 from blockchain import Blockchain, DB, NODES
 import os
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, WebSocket, UploadFile, File
 import uvicorn
 import socket
 #import requests as r
@@ -156,21 +156,6 @@ async def index():
     """ returns index page """ 
     return "see /docs for the api"
 
-
-# @app.post('/add_contract', tags=['contracts'])
-# async def addContract(contractTransaction: Contract):
-#     """ Use this to add smart contracts """
-#     senderPublicKey = contractTransaction.sender_public_send_key
-#     senderPrivateKey = contractTransaction.sender_private_send_key
-#     receiver = contractTransaction.receiver
-#     senderViewKey = contractTransaction.sender_view_key
-#     contractdata = contractTransaction.contractbinary
-#     contract = blockchain.add_smartContract(senderprivatekey= senderPrivateKey,
-#             sendersendpublickey= senderPublicKey,
-#             senderviewkey= senderViewKey,
-#             receiver= receiver,
-#             compiledcontract=contractdata)
-#     return {'message': contract}
 
 
 @app.get("/get_the_chain", tags=['information'])
@@ -331,24 +316,6 @@ async def dashboard_endpoint(websocket: WebSocket):
     print('client disconnected')
 
 
-# @app.websocket("/nodes")
-# async def dashboard_endpoint(websocket: WebSocket):
-#     """ This shows real time data of each node, this should be used for detecting new nodes in the network or helping with automating adding nodes"""
-#     await websocket.accept()
-#     message = None
-#     while True:
-#         try:
-#             if message != blockchain.nodes:
-#                 message = blockchain.nodes
-#                 await websocket.send_json(message)
-#                 print(message)
-#                 t.sleep(0.2)
-#             else:
-#                 pass
-#         except Exception as e:
-#             pass
-#         break
-#     print('client disconnected')
 
     
 
@@ -373,6 +340,24 @@ async def insert_chain(chain:Block):
 
 
 
+class insert_file_part(BaseModel):
+    file_part_num: int
+    file_part: bytes
+
+
+# @app.post('/add_file')
+# async def upload_file(file: UploadFile = File):
+#     """ moves the file to a folder, encrypts it, and returns the decryption key and location of the file parts """
+#     data = {}
+#     return data
+
+
+@app.post('/insert_file_from_node')
+async def add_part(file:insert_file_part):
+    """ the route for nodes to add broken up files """
+    pass
+
+
 def run_app():
         uvicorn.run(app, host=SERVER_HOST, port=SERVER_PORT, reload=SERVER_RELOAD)
         replace = Process(target=blockchain.replace_chain, args=())
@@ -380,8 +365,4 @@ def run_app():
 
 
 if __name__ == '__main__':
-    # os.system('touch privkey.pem && touch cert.pem')
-    # os.system('openssl rsa -passin pass:x -in keypair.key > privkey.pem')
-    # os.system('openssl x509 -req -days 365 -signkey privkey.pem < cert.pem && rm keypair.key')
-    # os.system('openssl x509 -req -days 365 -signkey privkey.pem > cert.pem')
     run_app()
