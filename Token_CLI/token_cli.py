@@ -114,7 +114,7 @@ def decrypt_wallet(password, file_name):
 
 @click.command()
 @click.option('--private-key', prompt='private key for your wallet', help='private key for signing transactions')
-@click.command('--receiver', prompt='who are you sending to', help='receiver public key')
+@click.option('--receiver', prompt='who are you sending to', help='receiver public key')
 def sign_transaction(private_key, receiver):
 	""" Generates a signature for transaction """
 	signs = Signatures()
