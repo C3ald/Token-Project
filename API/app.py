@@ -1,7 +1,7 @@
 #from starlette.responses import Response
 #from passlib.hash import pbkdf2_sha256
 #from starlette.websockets import WebSocketDisconnect
-from blockchain import Blockchain, DB, NODES
+from API.blockchain import Blockchain, DB, NODES
 import os
 from fastapi import FastAPI, WebSocket, UploadFile, File
 import uvicorn
