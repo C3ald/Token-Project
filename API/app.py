@@ -116,7 +116,7 @@ class Walletkey(BaseModel):
     privatekey: str
 
 class Wallet_public(BaseModel):
-    viewkey: str
+    publickey: str
 
 class Passphrase(BaseModel):
     passphrase: str

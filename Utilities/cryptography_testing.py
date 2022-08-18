@@ -259,7 +259,7 @@ class Check_Wallet_Balance():
 
 
 	def receiver_check(self, primary_address, blockchain):
-		i = 1
+		i = 1 
 		balance = 0
 		if 1 < len(blockchain):
 			while i != len(blockchain):

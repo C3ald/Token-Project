@@ -220,9 +220,9 @@ if __name__ == '__main__':
 	print(encrypt_key)
 	key_combined = onion.combine('Alice', encrypt_key)
 	print(key_combined)
-	encrypted_data = onion.encrypt('example', encrypt_key)
+	encrypted_data = onion.encrypt('example', encrypt_key) #Encrypts data using the encryption key
 	print(encrypted_data)
 	#decrypt = onion.decrypt('Alice', key)
-	decrypted_data = onion.decrypt_and_verify_data(encrypt_key, encrypted_data)
+	decrypted_data = onion.decrypt_and_verify_data(encrypt_key, encrypted_data) # decrypts the data
 	print(decrypted_data)
 	#print(decrypt)
