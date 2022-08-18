@@ -44,7 +44,19 @@ class Encrypt_and_Decrypt():
 		fernet = Fernet(key)
 		decrypted = fernet.decrypt(data).decode()
 		return decrypted
-
+	def encrypt_text(self, password:str, text):
+		""" encrypts the file """
+		key = self.key(password=password)
+		fernet = Fernet(key)
+		encrypted = fernet.encrypt(data)
+		return encrypted.decode()
+	
+	def decrypt_text(self, password:str, encrypted_text:str):
+		""" Decrypts the encrypted file """
+		key = self.key(password)
+		fernet = Fernet(key)
+		decrypted = fernet.decrypt(encrypted_text.encode()).decode()
+		return decrypted
 
 if __name__ == '__main__':
 	Encrypt_and_Decrypt()

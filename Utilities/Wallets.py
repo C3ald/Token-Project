@@ -71,7 +71,7 @@ class Onion_Signatures:
 		# Miner generates a random number of keys to use for encryption and the sender and the receiver encrypt their own sets of the miner's keys
 		# Miner's randomly generated keys encrypt the sender and receiver
 		# add keys used for encryption to a new part called encoding and combine the sender's publickey and the key for decrypting with it and do the same with receiver in a different set
-		# make it look like this: {'sender_encoding': sender+decryptionkey, 'receiver_encding': receiver+decryptionkey}
+		# make it look like this: {'sender_encoding': sender + decryptionkey, 'receiver_encding': receiver + decryptionkey}
 		sender = transaction['sender']
 		receiver = transaction['receiver']
 		amount = transaction['amount']
@@ -167,7 +167,7 @@ class Onion_Signatures:
 		return decryption_key.hex()
 
 
-	def combine(self, publickey, encryption_key):
+	def combine(self, publickey:str, encryption_key:str):
 		encrypted_pub = hashlib.sha256(publickey.encode()).hexdigest()
 		random_place = random.randint(0, len(encrypt_key))
 		new_string = encryption_key[:random_place] + encrypted_pub + encryption_key[random_place:]
