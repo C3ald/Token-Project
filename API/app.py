@@ -22,10 +22,9 @@ import random
 import base64
 from sys import getsizeof
 
-sys.path.insert(0, './Utilities')
-from cryptography_testing import *
+from Utilities.cryptography_testing import *
 from fastapi_signals import *
-from ProofOfStake.main import ProofOfStakeMAIN
+from Utilities.ProofOfStake.main import ProofOfStakeMAIN
 
 proof_of_stake_class = ProofOfStakeMAIN(Blockchain=Blockchain, NODES=NODES)
 
@@ -330,7 +329,7 @@ async def dashboard_endpoint(websocket: WebSocket):
 async def check_balance(wallet:Wallet_public):
     """ Checks the balance of a wallet with the view key """
 
-    balance = checkbalance.balance_check(wallet.viewkey, blockchain=blockchain.chain)
+    balance = checkbalance.balance_check(wallet.publickey, blockchain=blockchain.chain)
     return {'Address': balance['receive address'], 'balance': f'{balance["balance"]} Tokens'}
 
 
