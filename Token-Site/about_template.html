@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>About The Token Network</title>
+<link rel="stylesheet" href="static/styles/about.css" rel="stylesheet">
+
+<body>
+    <div class="Dropdown"> 
+        <button>Menu</button>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mining.html">Mining</a></li>
+            <li><a href="https://github.com/C3ald/Token-Project.git">Transact</a></li>
+            <li><a href="make_keys_template.html">Make a Wallet</a></li>
+
+
+        </ul>
+    </div>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('button').click(function(){
+            $('ul').toggleClass('active')
+        })
+    })
+</script>
+<div class="background">
+        <section></section>
+        <script src="static/js/squares.js"></script>
+</div>
+<div class="ground">
+<section>
+    <div class="content">
+        <h2>01</h2>
+        <h3>What is it?</h3>
+        <p>The Token Network is a blockchain network with its own cryptocurrency called Token, Token is untraceable and only you know which transactions you made.</p>
+    </div>
+</section>
+<section>
+    <div class="content">
+        <h2>02</h2>
+        <h3>What is blockchain?</h3>
+        <p>Blockchain is a public peer to peer network that uses nodes to connect.
+                    In order to become a node you need to get a copy of the blockchain. 
+                    The purpose of a blockchain network is to make banking easier, faster
+                    and removes the middle man (such as a bank). With blockchain you can view your funds, make withdraws and complete transactions. 
+                    No one has access to your funds without your private key and phrase. </p>
+    </div>
+</section>
+<section>
+    <div class="content">
+        <h2>03</h2>
+        <h3>Mining</h3>
+        <p>Mining on the blockchain is completed by your computer solving a puzzle which would need to match a hash with a certain
+                    value. An example is a hash with zeros in the first five characters of the hash (i.e. 000005). 
+                    You would need a wallet and to become a node in order to start mining. When blocks are mined the chain gets replaced and after a block is mined miners add decoy transactions and receive a reward from 
+                    a decoy wallet address. </p>
+                    <a href="mining.html">click to start mining</a>
+    </div>
+</section>
+<section>
+    <div class="content">
+        <h2>04</h2>
+        <h3>Wallets</h3>
+        <p>Wallets store the Tokens that you 
+                    earn from mining or trading. You start with 0 Tokens when you join the network.
+                    Wallets use a system of public and private keys to verify and secure your wallet(s) and transactions.
+                    The public key would decrypt your private key, verifying a valid wallet and allowing you to access your Tokens. Your passphrase is used to recover your privatekey, 
+                    to recover your private key you need to have the public key as well as the passphrase for the wallet.
+                    </p>
+                    <a href="make_keys_template.html">click to make a wallet</a>
+    </div>
+</section>
+<section>
+    <div class="content">
+        <h2>05</h2>
+        <h3>Transactions</h3>
+        <p>Transactions are made on the network and stored in the next block that other miners will mine out to verify your transaction. Since the blockchain stores the
+                    data publicly, all transactions are publicly available. Your view key acts as your public key would be ran in an encryption algorithm. When making a transaction a stealth address is automatically generated from your view key that will be logged on to the blockchain. 
+                Decoy transactions are made on the chain when transactions are verified to prevent tracing and to ensure privacy. You still need a spend public key and spend private key to make transactions to make sure that you actually own the wallet you say you do. </p>
+                    <!-- <a href="https://github.com/C3ald/Token-Project.git">click to start making transactions</a> -->
+    </div>
+</section>
+<section>
+    <div class="content">
+        <h2>06</h2>
+        <h3>Smart Contracts</h3>
+        <p>Smart contracts are used to give the blockchain more uses than a cryptocurrency. Smart contracts can be used to make flash loans, host other coins,
+            make NFTs (non-fungible tokens), host databases, websites, games, applications, and Exchange or swap coins. In order to use smart contracts you need a 
+            wallet and be able to make transactions.</p>
+                    <a href="#">Still in development</a>
+    </div>
+</section>
+<section>
+    <div class="content">
+        <h2>07</h2>
+        <h3>Nodes</h3>
+        <p>To become a node on the blockchain you don't need to have a web server to allow communication between the nodes on the network but you should to prevent issues, note that all nodes are public information.</p>
+                    <!-- <a href="https://github.com/C3ald/Token-API.git">Click to see the code for nodes</a> -->
+    </div>
+</section>
+<section>
+    <div class="content">
+        <h2>08</h2>
+        <h3>Cryptography and Privacy</h3>
+        <p>Privacy on the blockchain is a top priority! To ensure privacy, all 
+            transaction addresses on the blockchain are encrypted and false 
+            transactions are added by the miners. The cryptography behind the keys isn't that complex. 
+        The private sender key is the main private key and is made with a password generator. Then with an asymmetric 
+        encryption algorithm to produce a new key that is your public view key; the private sender key is run in the encryption algorithm again to get the public
+spend key. Finally the public view key is run in an encryption algorithm to get a receive address. When an transaction is made, both addresses on 
+the chain are encrypted with an asymmetrical encryption algorithm to prevent double spending and to stop forged transactions.
+To verify your balance your view key is ran in the encryption algorithm that was used to produce your receive address and then is used to check on the blockchain. </p>
+
+    </div>
+</section>
+<section>
+    <div class="content">
+        <h2>09</h2>
+        <h3>Decoy Signatures</h3>
+        <p>The Token Network uses decoy signatures to keep the sender and receiver of transactions anonymous. Ring signatures are made by miners making random wallet addresses
+	    and encrypting them. Then, adding them to the list of transactions to verify them by doing so. The reason to have decoy signatures is to keep data encrypted and all transactions untraceable no matter what.</p>
+    </div>
+</section>
+<section>
+    <div class="content">
+        <h2>10</h2>
+        <h3>For The Future</h3>
+        <p>Token will have a proof of stake model when it either reaches the capacity for one or if the developers are able to make a way to have both proof of work and proof of stake.</p>
+    </div>
+</section>
+
+
+
+
+
+	
+<section>
+    <div class="content">
+        <h2>11</h2>
+        <h3>Source code of website</h3>
+        <p>We like to keep our source code open to the public so anyone can contribute, inspect, and fix the code.</p>
+                    <a href="https://github.com/C3ald/Token-Site">Click to see the website source code</a>
+    </div>
+</section>
+
+<script src="static/js/scroll-out.js"></script>
+<script type="text/javascript">
+    ScrollOut({
+        targets: 'h2,h3,p,a'
+    })
+</script>
+</div>
+<div class="Bg">
+    <div class="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>
+</body>
+</html>

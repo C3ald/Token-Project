@@ -1,0 +1,53 @@
+<html>
+<head>
+    <title>Transactions</title>
+    <link rel="stylesheet" href="static/styles/transaction.css">
+</head>
+<body>
+
+    <div class="Dropdown">
+        <div class="menu"><button>Menu</button></div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mining.html">Mining</a></li>
+            <li><a href="https://github.com/C3ald/Wallet-App.git">Transact</a></li>
+            <li><a href="make_keys_template.html">Make a Wallet</a></li>
+
+        </ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.menu').click(function(){
+                $('ul').toggleClass('active')
+            })
+        })
+    </script>
+
+    <div class="container">
+    <div class="form">
+        <h2>Transact</h2>
+        <form method="POST", action="transactions_template.html">
+            <div class="inputbox">
+                <input type="text" name="senderpublickey" id="senderpublickey" placeholder="sender's public key">
+            </div>
+            <div class="inputbox">
+                <input type="text" name="senderprivatekey" id="senderprivatekey" placeholder="sender's private key">
+            </div>
+            <!-- <div class="inputbox">
+                <input type="text" name="senderpassphrase" id="senderpassphrase" placeholder="senders passphrase for wallet">
+            </div> -->
+            <div class="inputbox">
+                <input type="text" name="receiverpublickey" id="receiverpublickey" placeholder="receiver's public key">
+            </div>
+            <div class="inputbox">
+                <input type="text" name="amount" id="amount" placeholder="amount">
+            </div>
+            <div class="inputbox">
+                <input type="submit" value="submit">
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

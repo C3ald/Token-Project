@@ -1,0 +1,346 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: consolas;
+}
+body{
+    background: #000;
+}
+
+.background 
+{
+    overflow: hidden;
+    z-index: 1;
+}
+
+.background span
+{
+    position: fixed;
+    pointer-events: none;
+    animation: animate 5s linear infinite;
+}
+@keyframes animate
+{
+    0%
+    {
+        transform: scale(0) translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+    10%
+    {
+        opacity: 1;
+    }
+    90%
+    {
+        opacity: 1;
+    }
+    100%
+    {
+        transform: scale(1) translateY(-500%) rotate(360deg);
+        opacity: 0;
+    }
+}
+.Dropdown
+{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 2;
+}
+button
+{
+    position: relative;
+    width: 200px;
+    height: 60px;
+    font-size: 24px;
+    background: rgba(255,255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: none;
+    box-shadow: none;
+    outline: none;
+    color: #fff;
+}
+ul 
+{
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, .1);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    transform-origin: top;
+    transform: perspective(1000px) rotateX(-90deg);
+    transition: 0.5s;
+}
+ul.active
+{
+    transform: perspective(1000px) rotateX(0deg);
+}
+ul li
+{
+    list-style: none;
+}
+ul li a
+{
+    display: block;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    background: rgba(0,0, 0, 0.01);
+    color: #fff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    transition: 0.5s;
+}
+ul li a:hover
+{
+    background: #f7003e;
+}
+
+.Home
+{
+    position: absolute;
+    bottom: 40px;
+    left: 10px;
+    color: #fff;
+}
+
+
+.ground section{
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+.content
+{
+    background: rgba(255, 255, 255, .1);
+    backdrop-filter: blur(10px);
+    width: 120%;
+    height: 280px;
+    padding: 30px;
+    margin: 10px;
+    border-radius: 10px;
+    z-index: 10;
+}
+section .content{
+    max-width: 80%;
+}
+section .content h2{
+    position: relative;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-size: 3em;
+    transition: 0.5s;
+    transform-origin: left;
+    transform: scaleX(0);
+}
+section .content h2::before
+{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ee0047;
+    transform-origin: right;
+    transition: 0.5s;
+}
+section .content h3{
+    position: relative;
+    margin: 5px 0 0;
+    padding: 0;
+    display: inline-block;
+    font-size: 2em;
+    transition: 0.5s;
+    transform-origin: left;
+    transform: scaleX(0);
+}
+section .content h3::before
+{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #340f9b;
+    transform-origin: right;
+    transition: 0.5s;
+}
+section .content p
+{
+    opacity: 0;
+    font-size: 1.2em;
+    transition: 1s;
+}
+section .content a
+{
+    position: relative;
+    background: #fff;
+    color: #262626;
+    padding: 15px 30px;
+    font-size: 16px;
+    display: inline-block;
+    text-decoration: none;
+    font-weight: 700;
+    transition: 1s;
+    opacity: 0;
+    transform: translateX(100px);
+}
+section .content a:hover{
+    background: #f7003e;
+    transition-delay: 0;
+}
+section .content h2[data-scroll="in"]
+{
+    transform: scaleX(1);
+}
+section .content h2[data-scroll="in"]::before
+{
+    transform: scaleX(0);
+    transition-delay: 0.5s;
+}
+section .content h3[data-scroll="in"]
+{
+    transform: scaleX(1);
+    transition-delay: 1s;
+}
+section .content h3[data-scroll="in"]::before
+{
+    transform: scaleX(0);
+    transition-delay: 1s;
+}
+section .content p[data-scroll="in"]
+{
+    opacity: 1;
+    transition-delay: 1s;
+}
+section .content a[data-scroll="in"]
+{
+    opacity: 1;
+    transition-delay: 1s;
+    transform: translateX(0px);
+}
+.Bg
+{
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    min-height: 100vh;
+}
+.Bg .loader
+{
+    position: fixed;
+    right: 15px;
+    bottom: 50px;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    -webkit-box-reflect: below 1px linear-gradient(transparent, #0005);
+    z-index: 10;
+}
+.Bg .loader:hover
+{
+    background: #fd312a;
+    box-shadow: 0 0 5px #fd312a,
+                0 0 25px #fd312a,
+                0 0 50px #fd312a,
+                0 0 200px #fd312a;
+}
+.Bg .loader span
+{
+    position: absolute;
+    display: block;
+}
+.Bg .loader span:nth-child(1)
+{
+    top: 0;
+    left: -100;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(90deg, transparent,#fd312a);
+    animation: animate1 1s linear infinite;
+    animation-delay: 0s;
+}
+@keyframes animate1
+{
+    0%
+    {
+        left: -100%;
+    }
+    100%
+    {
+        left: 100%;
+    }
+}
+.Bg .loader span:nth-child(3)
+{
+    bottom: 0;
+    left: -100;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(90deg, transparent,#fd312a);
+    animation: animate3 1s linear infinite;
+    animation-delay: 0s;
+}
+@keyframes animate3
+{
+    0%
+    {
+        left: 100%;
+    }
+    100%
+    {
+        left: -100%;
+    }
+}
+.Bg .loader span:nth-child(2)
+{
+    right: 0;
+    top: -100;
+    width: 40px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent,#fd312a);
+    animation: animate2 1s linear infinite;
+    animation-delay: 0.5s;
+}
+@keyframes animate2
+{
+    0%
+    {
+        top: -100%;
+    }
+    100%
+    {
+        top: 100%;
+    }
+}
+.Bg .loader span:nth-child(4)
+{
+    left: 0;
+    top: 100%;
+    width: 40px;
+    height: 100%;
+    background: linear-gradient(0deg, transparent,#fd312a);
+    animation: animate4 1s linear infinite;
+    animation-delay: 0.5s;
+}
+@keyframes animate4
+{
+    0%
+    {
+        top: 100%;
+    }
+    100%
+    {
+        top: -100%;
+    }
+}

@@ -1,0 +1,57 @@
+<html>
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/styles/transaction.css')}}">
+    <!-- for navbar<link rel="stylesheet" href="{{ url_for('static', filename='/styles/navagationbar.css')}}"> -->
+</head>
+<body>
+<!-- for navbar    <div class="nav">
+        <ul class="nav-container">
+            <div class="nav-content">
+            <li><a href="{{ url_for('index')}}">Home</a></li>
+            <li><a href="{{ url_for('about')}}">About</a></li>
+            <li><a href="{{ url_for('transact')}}">Transact</a></li>
+            <li><a href="{{ url_for('mining')}}">Mining</a></li>
+            </div>
+        </ul>
+    </div>  -->
+
+    <div class="Dropdown">
+        <button>Menu</button>
+        <ul>
+            <li><a href="{{url_for('index')}}">Home</a></li>
+            <li><a href="{{url_for('mining')}}">Mining</a></li>
+            <li><a href="https://github.com/C3ald/Wallet-App.git">Transact</a></li>
+            <li><a href="{{url_for('makekeys')}}">Make a Wallet</a></li>
+            <li><a href="{{url_for('login')}}">login</a></li>
+
+        </ul>
+    </div>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('button').click(function(){
+            $('ul').toggleClass('active')
+        })
+    })
+</script>
+    <div id="id01" class="modal">
+    <div class="container">
+    <div class="form">
+        <p><h2>Register</h2></p>
+        <form action="{{url_for('user')}}" method="post">
+            <div class="inputbox">
+                <p><input id="nm" type="text" name="nm" placeholder="Username" /></p>
+                <p><input id="nm1" type="text" name="nm1" placeholder="Password" /></p>
+                <p><input id="nm2" type="text" name="nm2" placeholder="Password" /></p>
+            </div>
+            <div class="inputbox">
+                <p><input type="submit" value="submit" />
+                <a href="{{url_for('login')}}">already have an account?</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+    </div>
+</body>
+</html>

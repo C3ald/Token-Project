@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Make a wallet</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='/styles/makekeys.css')}}">
+    </head>
+    <body>
+    <!-- <div class="Dropdown">
+        <button>Menu</button>
+        <ul>
+            <li><a href="{{url_for('index')}}">Home</a></li>
+            <li><a href="{{url_for('mining')}}">Mining</a></li>
+            <li><a href="">Transact</a></li>
+            <li><a href="{{url_for('makekeys')}}">Make a Wallet</a></li>
+            <li><a href="{{url_for('login')}}">view wallet</a></li>
+
+        </ul>
+    </div>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('button').click(function(){
+            $('ul').toggleClass('active')
+        })
+    })
+</script> -->
+
+
+        <div id="blur">
+        <div id="particles-js"></div>
+            <div class="Buttons">
+                <a href="#" onclick="toggle()">Make Wallet</a>
+                <a href="{{url_for('login')}}">See Wallet</a>
+                <a href="{{url_for('mining')}}">Mining</a>
+                <a href="https://github.com/C3ald/Wallet-App.git">Transactions</a>
+                <a href="{{url_for('index')}}">Home</a>
+                <a href="{{url_for('become_node')}}">become a node</a>
+            </div> 
+        </div> 
+        <div id="popup">          
+            <h2>To make a wallet, Download the Token Wallet app from github by clicking the link </h2> 
+            <p>https://github.com/C3ald/Wallet-App.git</p>
+            <a href="#" onclick="toggle()">dismiss</a>
+        </div>
+    </body>
+                <script type="text/javascript">
+            function toggle(){
+                var blur = document.getElementById('blur')
+                blur.classList.toggle('active')
+                var popup = document.getElementById('popup')
+                popup.classList.toggle('active')
+            }
+            </script>
+        <script type="text/javascript" src="{{ url_for('static', filename='/js/particles.js')}}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='/js/particlesapp.js')}}"></script>
+</html>

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block header %}
+View Transactions
+{% endblock %}
+
+{% block content %}
+See The Chain
+{% endblock %}
+
+{% block title %}
+<h3>Transactions</h3>
+<span>The recent transactions</span>
+{% endblock %}
+ 
+{% block table %}
+<table class="table">
+	<tr>
+		<th>Time</th>
+		<th>Hash</th>
+		<th>Amount</th>
+	</tr>
+	{% for block in data['blockchain'] %}
+	<tr>
+		<td>{{ block.timestamp }}</td>
+		<td>{{ block.previous_hash }}</td>
+		<td>{{ block.data[0]['amount'] }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}

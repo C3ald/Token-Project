@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Token network</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='/styles/index.css')}}" rel="stylesheet">
+</head>
+<body>
+  <section class="banner">
+    <header>
+      <a href="{{url_for('index')}}" class="logo">Token</a>
+      <div class="toggle" onclick="toggle();"></div>
+    </header>
+    <div class="content">
+    <div class="contentBx">
+      <h2>Welcome to<br>the future of privacy and crypto</h2>
+      <p>Welcome to The Token Network, a blockchain network with a cryptocurrency called Token, it's like Dogecoin 
+        and Bitcoin but faster and private.</p>
+        <a href="{{url_for('about')}}">About</a>
+    </div>
+    </div>
+  <ul class="sci">
+    <li><a href="#"></a></li>
+  </ul>
+  <ul class="menu">
+    <li><a href="{{url_for('index')}}">Home</a></li>
+    <li><a href="{{url_for('about')}}">About</a></li>
+    <li><a href="{{url_for('mining')}}">Mining</a></li>
+    <li><a href="{{url_for('makekeys')}}">Wallets and transactions</a></li>
+    <li><a href="{{url_for('blockchain')}}">See the chain</a></li>
+  </ul>
+</section>
+<!--some backgrounds on this website were not handmade by the creator of this website, 
+  all proper credit to the creators of the backgrounds, images, and gifs-->
+  <script type="text/javascript">
+    function toggle(){
+      const toggle = document.querySelector('.toggle');
+      const banner = document.querySelector('.banner');
+      toggle.classList.toggle('active')
+      banner.classList.toggle('active')
+    }
+  </script>
+</body>
+</html>

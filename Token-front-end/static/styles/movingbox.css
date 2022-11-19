@@ -1,0 +1,80 @@
+.Bg
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #333333;
+    overflow: hidden;
+}
+.Bg .container
+{
+    position: relative;
+    width: 100%;
+    transform: rotate(-35deg);
+}
+.Bg .container .box
+{
+    position: relative;
+    left: -200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100% + 400px);
+    -webkit-box-reflect: below 1px linear-gradient(transparent,#0004);
+    animation: animateSurface 1.5s ease-in-out infinite;
+}
+
+@keyframes animateSurface
+{
+    0%
+    {
+        transform: translate(0px);
+    }
+    100%
+    {
+        transform: translate(-200px);
+    }
+}
+.Bg .container .box .cube
+{
+    position: relative;
+    width: 200px;
+    height: 200px;
+    background: #fa215e;
+    box-shadow: 0 0 5px rgb(250,33,94,0.7),
+    0 0 25px rgb(250,33,94,0.6),
+    0 0 50px rgb(250,33,94,0.4),
+    0 0 100px rgb(250,33,94,0.3),
+    0 0 200px rgb(250,33,94,0.01);
+    transform-origin: bottom right;
+    animation: animate 1.5s ease-in-out infinite;
+}
+@keyframes animate
+{
+    0%
+    {
+        transform: rotate(0deg);
+    }
+    60%
+    {
+        transform: rotate(90deg);
+    }
+    65%
+    {
+        transform: rotate(85deg);
+    }
+    70%
+    {
+        transform: rotate(90deg);
+    }
+    75%
+    {
+        transform: rotate(87.5deg);
+    }
+    80%,100%
+    {
+        transform: rotate(90deg);
+    }
+
+}

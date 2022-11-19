@@ -1,0 +1,49 @@
+body{
+	background-color: rgb(23, 23, 30);
+	color: grey;
+}
+
+div.main-body {
+	display: grid;
+	grid-template-columns: minmax(300px , auto)1fr;
+	grid-template-areas: "navbar mainContent";
+	grid-gap: 2%;
+}
+
+nav#navbar {
+	grid-area: 30%;
+	position: fixed;
+}
+
+nav#navbar a {
+	display: block;
+	border: 1px solid darkgrey;
+	padding: 3%;
+	margin: 3% 0;
+	text-decoration: none;
+	color: lightgrey;
+	transition: ease-in-out .7s;
+
+}
+
+nav#navbar a:hover{
+	background-color: rgb(25, 24, 45);
+	color: rgb(255, 78, 78);
+	transition: ease-in-out .7s;
+}
+
+main#main-doc {
+	grid-area: mainContent;
+}
+
+header {
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+code {
+	background-color: rgb(23, 23, 40);
+	color: rgb(255, 78, 78);
+	display: block;
+	padding: 2%;
+}

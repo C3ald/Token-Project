@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<link rel="stylesheet" href="static/styles/isometric.css">
+</head>
+
+<body>
+	<div class="main-body">
+		<nav id="navbar">
+			
+			<header>Documentation Menu</header>
+			<a href="#Intro" class="nav-link">
+				What is Token?</a>
+			<a href="#Object" class="nav-link">
+				Transactions</a>
+			<a href="#Inheritance" class="nav-link">
+				Mining</a>
+			<a href="#Polymorphism" class="nav-link">
+				Getting the current Blockchain</a>
+			<a href="#Abstraction" class="nav-link">
+				Live blockchain feed</a>
+			<a href="#Encapsulation" class="nav-link">
+				Adding Nodes</a>
+		</nav>
+
+		<main id="main-doc">
+			<section class="main-section" id="Intro">
+				<header>
+					What is Token?
+				</header>
+				<p>
+					Token is a simple private cryptocurrency and blockchain. It uses proof of work and soon proof of stake to get
+					consensus among the nodes and network.
+				</p>
+				<p>The project is heavily inspired by Monero, Bitcoin, and Ethereum.
+				</p>
+				<br><br>
+				<h3>What is blockchain technology?</h3>
+				<p>In simple terms blockchain is a distributed ledger that checks the previous block making it a chain or for the programming Chads it's basically a linked list that uses the hash of the previous object
+					to verify that it hasn't been tampered with. In order to prevent blocks from being tampered and added to fast there is typically a proof of work algorithm or some way to get consensus in the network.
+					<br> The main pros of blockchain are:
+				</p>
+				<ul>
+					<li>Decentralization</li>
+					<li>Security</li>
+					<li>Trust</li>
+					<li>Transparency</li>
+					<li>Immutability</li>
+					<li>Backed by cryptography and mathematics</li>
+				</ul>
+			</section>
+
+			<section class="main-section" id="Object">
+				<header>
+					Transactions
+				</header>
+				<p>
+					Transactions are sent out as POST requests on nodes and verified by miners
+					here is an example to add a transaction.
+				</p>
+
+				<code>
+					
+					POST https://url_for_node:port/add_unconfirmed_transaction
+					<br>
+						{
+							<br>
+							sender:	str,
+							<br>
+							sender_signature: str,
+							<br>
+							receiver: str,
+							<br>
+							amount: float
+							<br>
+						}
+				</code>
+
+
+				<p>Nodes broadcast transactions differently 
+					than users adding transactions. As to prevent poisoning 
+					of transactions or data.
+				</p>
+				<code>
+					
+					POST https://url_for_node:port/add_transaction
+					<br>
+						{
+							<br>
+							   sender_public_send_key: str,
+							   <br>
+    							   sender_signature: str,
+							       <br>
+    							   receiver: str,
+							       <br>
+    							   transactionID: str,
+							       <br>
+    							   timestamp: str,
+							       <br>
+    							   amount: float
+							<br>
+						}
+				</code>
+			</section>
+
+			<section class="main-section" id="Inheritance">
+				<header>
+					Mining
+				</header>
+				<p>
+					Mining adds blocks and only requires the public key of a wallet to add a block and verify transactions.
+				</p>
+				<code>
+					
+					POST https://url_for_node:port/mining
+					<br>
+						{
+							<br>
+							   public_key: str
+							<br>
+						}
+				</code>
+				<h3>Adding Or Announcing Blocks To The Network</h3>
+				<p>
+				Announcing blocks is a simple POST request to Nodes and the nodes will check the validity of the new block
+				</p>
+				<code>
+					
+					POST https://url_for_node:port/insert_block
+					<br>
+						{
+							<br>
+							   block: dict
+							<br>
+						}
+				</code>
+			</section>
+
+			<section class="main-section" id="Polymorphism">
+				<header>
+					Polymorphism
+				</header>
+				<p>
+					The word polymorphism means having many
+					forms. In simple words, we can define
+					polymorphism as the ability of a message
+					to be displayed in more than one form.
+					A real-life example of polymorphism, a
+					person at the same time can have
+					different characteristics.
+					Like a man at the same time is a father,
+					a husband, an employee. So the same
+					person posses different behavior in
+					different situations. This is called
+					polymorphism. Polymorphism is considered
+					as one of the important features of Object
+					Oriented Programming.
+					<br>
+					<b>In C++ polymorphism is mainly
+						divided into two types:</b>
+					<br> 1. Compile time Polymorphism<br>
+					2. Runtime Polymorphism
+				</p>
+
+				<p>Compile time polymorphism: This type of
+					polymorphism is achieved by function
+					overloading or operator overloading.
+					<br> Runtime polymorphism: This type
+					of polymorphism is achieved by
+					Function Overriding.
+				</p>
+			</section>
+
+			<section class="main-section" id="Abstraction">
+				<header>
+					Abstraction
+				</header>
+
+				<p>
+					Data abstraction is one of the most
+					essential and important feature of object
+					oriented programming in C++. Abstraction
+					means displaying only essential information
+					and hiding the details. Data abstraction
+					refers to providing only essential information
+					about the data to the outside world,
+					hiding the background details or implementation.
+					<br> Consider a real life example of a man driving
+					a car. The man only knows that pressing the
+					accelerators will increase the speed of car
+					or applying brakes will stop the car but he
+					does not know about how on pressing accelerator
+					the speed is actually increasing, he does
+					not know about the inner mechanism of the car
+					or the implementation of accelerator, brakes
+					etc in the car. This is what abstraction is.
+				</p>
+
+				<p>
+					<b>Abstraction using Classes:</b> We can
+					implement Abstraction in C++ using classes.
+					Class helps us to group data members and member
+					functions using available access specifiers. A
+					Class can decide which data member will be
+					visible to outside
+					world and which is not.
+					<br>
+					<b>Abstraction in Header files:</b> One
+					more type of abstraction in C++ can be
+					header files. For example, consider the
+					pow() method present in math.h header file.
+					Whenever we need to calculate power of a
+					number, we simply call the
+					function pow() present in the math.h header
+					file and pass the numbers as arguments
+					without knowing the underlying algorithm
+					according to which the function is actually
+					calculating power of numbers.
+					<br><br><b>Advantages of Data Abstraction:
+
+					</b><br> 1. Helps the user to avoid writing
+					the low level code.<br> 2. Avoids code
+					duplication and increases reusability.<br>
+					3. Can change internal implementation of
+					class independently without
+					affecting the user.<br> 4. Helps to
+					increase security of an application or program
+					as only important details are
+					provided to the user.
+				</p>
+			</section>
+
+			<section class="main-section" id="Encapsulation">
+				<header>
+					Encapsulation
+				</header>
+				<p>
+					In normal terms Encapsulation is defined
+					as wrapping up of data and information
+					under a single unit. In Object Oriented
+					Programming, Encapsulation is defined as
+					binding together the data and the functions
+					that manipulates them. Consider
+					a real life example
+					of encapsulation, in a company there are
+					different sections like the accounts section,
+					finance section, sales section etc. The finance
+					section handles all the financial transactions
+					and keep records of all the data related to
+					finance.
+					Similarly the sales section handles all the
+					sales related activities and keep records of
+					all the sales. Now there may arise a situation
+					when for some reason an official from finance
+					section needs all the data about sales in a
+					particular
+					month. In this case, he is not allowed to
+					directly access the data of sales section.
+					He will first have to contact some other
+					officer in the sales section and then
+					request him to
+					give the particular data. This is what
+					encapsulation is. Here the data of
+					sales section and the
+					employees that can manipulate them are
+					wrapped under a single name “sales section”.
+				</p>
+
+				<p>
+					Encapsulation also lead to data abstraction
+					or hiding. As using encapsulation also hides
+					the data. In the above example the data of
+					any of the section like sales, finance or
+					accounts is hidden from any other section.<br>
+					In C++ encapsulation
+					can be implemented using Class
+					and access modifiers.
+				</p>
+			</section>
+		</main>
+	</div>
+</body>
+
+</html>
