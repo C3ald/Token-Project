@@ -40,6 +40,12 @@ class Blockchain:
             self.nodes = self.read_data(NODES)
             print(self.nodes)
         else:
+<<<<<<< HEAD
+=======
+            # NODES.insert(self.nodes)
+            # self.read_data(NODES)
+            # self.nodes = []
+>>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
             None
 
         self.unconfirmed_transactions = []
@@ -91,6 +97,10 @@ class Blockchain:
 
         DataBase.truncate()
         for item in data:
+<<<<<<< HEAD
+=======
+            # formatted = {'node': item}
+>>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
             DataBase.insert(item)
         return 'data has been added!!'
 
