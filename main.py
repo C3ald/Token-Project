@@ -1,10 +1,5 @@
 from API.app import app
 import uvicorn
-<<<<<<< HEAD
-
-
-uvicorn.run(app)
-=======
 import sys
 from Utilities.cryptography_testing import *
 from Utilities.Wallets import *
@@ -18,4 +13,3 @@ except:
 
 if option == "wallet":
 	main_test()
->>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
