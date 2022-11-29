@@ -316,10 +316,6 @@ class Blockchain:
         previous_block = self.get_prev_block()
         return previous_block['index'] + 1
 
-    def checkTransactions(self, block):
-        """ checks if a transaction is in new block """
-        return numOfTransactionsInBlock
-
     def doubleSpendCheck(self, transaction):
         """ checks for double spending in the block"""
         verify = self.equals(transaction)
@@ -363,10 +359,11 @@ class Blockchain:
     def suspendAlgorithm(self, address):
         """ Checks to see if the address is reapeating in the blockchain, this is to prevent someone from owning too 
         much of the blockchain and fight against large scale mining and 51% attacks """
+        offset = 20
         blockIndex = self.chain[-1]['index']
-        blockIndex = blockIndex - 20
+        blockIndex = blockIndex - offset
         if blockIndex >= 0:
-            for block in self.chain[20:]:
+            for block in self.chain[offset:]:
                 for data in block['data']:
                     for receiver in data['receiver']:
                         stealthAddress = receiver
