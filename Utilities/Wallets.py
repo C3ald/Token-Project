@@ -9,10 +9,7 @@ import random
 from binascii import unhexlify
 import hashlib
 import codecs
-<<<<<<< HEAD
-=======
 import requests as r
->>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
@@ -26,7 +23,6 @@ class Wallet_generation:
 	def __init__(self):
 		pass
 
-<<<<<<< HEAD
 
 	def generate(self):
 		""" Generates a new set of wallet keys """
@@ -34,7 +30,6 @@ class Wallet_generation:
 		public = key.public_key().export_key(format='PEM')
 		private = key.export_key(format='PEM')
 		results = {'public key': public, 'private key': private}
-=======
 	def seed_gen(self, password=None):
 		if not password:
 			word_file = "./seeds.txt"
@@ -53,7 +48,6 @@ class Wallet_generation:
 		public = key.public_key().export_key(format='PEM')
 		private = key.export_key(format='PEM', passphrase=protection, protection="PBKDF2WithHMAC-SHA1AndAES128-CBC")
 		results = {'public key': public, 'private key': private, 'protection':protection}
->>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
 		return results
 	
 
@@ -63,15 +57,9 @@ class Signatures:
 	def __init__(self):
 		pass
 
-<<<<<<< HEAD
 	def sign(self, private_key, receiver):
 		""" signs the transaction by using the receiver's public key as the encrypted data """
 		private = ECC.import_key(private_key)
-=======
-	def sign(self, private_key, receiver, passphrase:str):
-		""" signs the transaction by using the receiver's public key as the encrypted data """
-		private = ECC.import_key(private_key, passphrase=passphrase,)
->>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
 		# id = str(uuid.uuid4())
 		data = receiver.encode()
 		hashed_id = SHA512.new(data)
@@ -110,11 +98,7 @@ class Onion_Signatures:
 		encryption_keys = []
 		
 		
-<<<<<<< HEAD
 		layers = 13
-=======
-		layers = random.randint(5, 8)
->>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
 		for x in ranage(layers):
 			key = self.generate_new_key()
 			sender = str(sender)
@@ -131,63 +115,16 @@ class Onion_Signatures:
 				encryption_keys.append(key)
 		sender_set = self.combine(sender, key)
 		receiver_set = self.combine(receiver, key)
-<<<<<<< HEAD
-=======
-		# encryption_keys[encryption_keys.index(key)]
->>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
 		sender_sets = encryption_keys
 		receiver_sets = encryption_keys
 		sender_sets[sender_sets.index(key)] = sender_set
 		receiver_sets[receiver_sets.index(key)] = receiver_sets
-<<<<<<< HEAD
-=======
-
->>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
 		transaction['sender'] = sender
 		transaction['receiver'] = receiver
 		transaction.update({'sender set': sender_sets, 'receiver set': receiver_sets})
 		return transaction
 		
 
-<<<<<<< HEAD
-=======
-
-
-			
-
-
-
-
-	# def combine(self, publickey, decryption_key):
-	# 	""" Combines the sender and receiver with the decryption key, hashes the sender and receiver then combines it with the decryption key """
-	# 	encrypted_key = hashlib.sha256(publickey.encode()).hexdigest()
-	# 	encrypted_key = bytes(encrypted_key.encode())
-	# 	encrypted_key = int.from_bytes(encrypted_key, 'big')
-	# 	encrypted_decryption = bytes(decryption_key.encode())
-	# 	encrypted_decryption = int.from_bytes(encrypted_decryption, 'big')
-	# 	print(encrypted_decryption)
-	# 	algorithm = encrypted_key * encrypted_decryption
-	# 	print(algorithm)
-	# 	result = hex(algorithm)
-	# 	return result
-
-
-	# def decrypt(self, publickey, encrypted_data):
-	# 	encrypted_key = hashlib.sha256(publickey.encode()).hexdigest()
-	# 	encrypted_key = bytes(encrypted_key.encode())
-	# 	encrypted_public = int.from_bytes(encrypted_key, 'big')
-	# 	encrypted_data = bytes.fromhex(encrypted_data[2:])
-	# 	encrypted_data = int.from_bytes(encrypted_data, 'big')
-	# 	algorithm = encrypted_data / encrypted_public
-	# 	print(algorithm)
-	# 	to_hex = hex(int(algorithm))[2:]
-	# 	#print(to_hex)
-	# 	to_bytes = bytes.fromhex(to_hex)
-	# 	#to_bytes = unhexlify(to_int)
-	# 	return to_bytes.decode()
-
-
->>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
 	def decrypt_and_verify_data(self, encryption_key:str, encrypted_data:dict):
 		""" Decrypts the data """
 		key = unhexlify(encryption_key)
@@ -206,21 +143,12 @@ class Onion_Signatures:
 	def decrypt_encryption_key(self, publickey:str, encrypted_decryption_key_data:str):
 		encrypted_pub = hashlib.sha256(publickey.encode()).hexdigest()
 		decryption_key = encrypted_decryption_key_data.replace(encrypted_pub, '')
-<<<<<<< HEAD
-=======
-		# key = AES.new(decryption_key, AES.MODE_EAX)
-		# plain_text = key.decrypt_and_verify(encrypted_data)
->>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
 		return decryption_key.hex()
 
 
 	def combine(self, publickey:str, encryption_key:str):
 		encrypted_pub = hashlib.sha256(publickey.encode()).hexdigest()
-<<<<<<< HEAD
 		random_place = random.randint(0, len(encrypt_key))
-=======
-		random_place = random.randint(0, len(encryption_key))
->>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
 		new_string = encryption_key[:random_place] + encrypted_pub + encryption_key[random_place:]
 		return new_string
 
@@ -237,11 +165,7 @@ class Onion_Signatures:
 		key = unhexlify(key)
 		cipher = AES.new(key, AES.MODE_EAX)
 		encrypted_data, tag = cipher.encrypt_and_digest(data)
-<<<<<<< HEAD
 		return {'data':f'{cipher.nonce.hex()}+{encrypted_data.hex()}+{tag.hex()}', 'key':decrypt_key}
-=======
-		return {'data':f'{cipher.nonce.hex()}+{encrypted_data.hex()}+{tag.hex()}', "decryption key": key.hex()}
->>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
 	
 	def format_data(self, data:str):
 		result = data.split('+')
@@ -258,33 +182,20 @@ class Onion_Signatures:
 
 
 
-<<<<<<< HEAD
 if __name__ == '__main__':
-=======
-def main_test():
->>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
 	wallet = Wallet_generation()
 	keys = wallet.generate()
 	pub_key = keys['public key']
 	priv_key = keys['private key']
-<<<<<<< HEAD
 	print(pub_key)
 	print(priv_key)
 	signer = Signatures()
 	signature = signer.sign(priv_key, 'Alice')
-=======
-	protection = keys['protection']
-	print(pub_key)
-	print(priv_key)
-	signer = Signatures()
-	signature = signer.sign(priv_key, 'Alice', passphrase=protection)
->>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
 	#print(signature)
 	valid = signer.verify(pub_key, 'Alice', signature)
 	#print(valid)
 	onion = Onion_Signatures()
 	encrypt_key = onion.generate_new_key()
-<<<<<<< HEAD
 	print({'encrypt key':encrypt_key})
 	key_combined = onion.combine('Alice', encrypt_key)
 	print({'combined key':key_combined})
@@ -294,16 +205,3 @@ def main_test():
 	decrypted_data = onion.decrypt_and_verify_data(encrypt_key, encrypted_data) # decrypts the data
 	print(decrypted_data)
 	#print(decrypt)
-=======
-	print(f"encryption key: {encrypt_key}")
-	key_combined = onion.combine('Alice', encrypt_key)
-	print(key_combined)
-	encrypted_data = onion.encrypt('example', encrypt_key) #Encrypts data using the encryption key
-	print(f"encrypted data:{encrypted_data}")
-	#decrypt = onion.decrypt('Alice', key)
-	decrypted_data = onion.decrypt_and_verify_data(encrypt_key, encrypted_data) # decrypts the data
-	print(f"decrypted data: {decrypted_data}")
-	#print(decrypt)
-if __name__ == "__main__":
-	main_test()
->>>>>>> 93447e50baea94115edeecf17a37cd2ae249d457
