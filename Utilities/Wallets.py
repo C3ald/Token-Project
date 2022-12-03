@@ -32,7 +32,6 @@ class Wallet_generation:
 
 	def generate(self):
 		""" Generates a new set of wallet keys """
-<<<<<<< HEAD
 		key = ECC.generate(curve='P-256')
 		public = key.public_key().export_key(format='DER')
 		private = key.export_key(format='DER')
@@ -50,24 +49,6 @@ class Wallet_generation:
 			seed = password
 		print(seed)
 		return seed
-=======
-		ecc = ECC
-		ecc.d = self.seed_gen()
-		key = ecc.generate(curve='P-256')
-		public = key.public_key().export_key(format='SEC1')
-		private = key.export_key(format='PEM')
-		results = {'public key': hexlify(public).decode(), 'private key': private, 'seed': unhexlify(ecc.d).decode()}
-		return results
-
-	def seed_gen(self):
-		word_file = "./seeds.txt"
-		words = open(word_file).read().splitlines()
-		num_of_seeds = 29
-		seeds = random.sample(words, num_of_seeds)
-		seed = ' '.join(seeds)
-		# print(seed)
-		return hexlify(seed.encode())
->>>>>>> 1cfa325 (test)
 	# def generate(self):
 	# 	""" Generates a new set of wallet keys """
 	# 	key = ECC.generate(curve='P-256')
@@ -85,11 +66,7 @@ class Signatures:
 		pass
 
 	def sign(self, private_key, receiver):
-<<<<<<< HEAD
 		""" signs the transaction by using the receiver's public key as the encrypted data """
-=======
-		""" signs the transaction by using the receiver's public key as the encrypted data"""
->>>>>>> 1cfa325 (test)
 		private = ECC.import_key(private_key)
 		# id = str(uuid.uuid4())
 		data = receiver.encode()
@@ -100,11 +77,7 @@ class Signatures:
 		return signature
 
 	def verify(self, public_key, receiver, signature):
-<<<<<<< HEAD
 		""" Verifies the signature returns True if signature is valid and False if the signature is invalid"""
-=======
-		""" Verifies the signature returns True if signature is valid and False if the signature is invalid Make sure the key(s) are not or is not in hex format """
->>>>>>> 1cfa325 (test)
 		public = ECC.import_key(public_key)
 		hashed_id = SHA512.new(receiver.encode())
 		un_hexed = unhexlify(signature)
@@ -116,199 +89,6 @@ class Signatures:
 			return False
 
 
-<<<<<<< HEAD
-class Onion_Signatures:
-	""" Encrypts the data on the transaction by using layers of encryption """
-
-	def __init__(self):
-		pass
-
-	def make_onion_signature(self, transaction: dict):
-		""" encrypts all the transaction data """
-		# Miner generates a random number of keys to use for encryption and the sender and the receiver encrypt their own sets of the miner's keys
-		# Miner's randomly generated keys encrypt the sender and receiver
-		# add keys used for encryption to a new part called encoding and combine the sender's publickey and the key for decrypting with it and do the same with receiver in a different set
-		# make it look like this: {'sender_encoding': sender + decryptionkey, 'receiver_encding': receiver + decryptionkey}
-		sender = transaction['sender']
-		receiver = transaction['receiver']
-		amount = transaction['amount']
-		signature_of_sender = transaction['signature']
-		encryption_keys = []
-
-		layers = 13
-		for x in ranage(layers):
-			key = self.generate_new_key()
-			sender = str(sender)
-			receiver = str(receiver)
-			signature_of_sender = str(signature_of_sender)
-			sender = self.encrypt(sender, key=key)
-			receiver = self.encrypt(receiver, key=key)
-			if len(encryption_keys) == 0:
-				encryption_keys.append(key)
-			else:
-				for used_key in encryption_keys:
-					encrypted_key = self.encrypt(used_key, key)
-					encryption_keys[encryption_keys.index(used_key)] = encrypted_key
-				encryption_keys.append(key)
-		sender_set = self.combine(sender, key)
-		receiver_set = self.combine(receiver, key)
-		sender_sets = encryption_keys
-		receiver_sets = encryption_keys
-		sender_sets[sender_sets.index(key)] = sender_set
-		receiver_sets[receiver_sets.index(key)] = receiver_sets
-		transaction['sender'] = sender
-		transaction['receiver'] = receiver
-		transaction.update(
-		    {'sender set': sender_sets, 'receiver set': receiver_sets})
-		return transaction
-
-	def decrypt_and_verify_data(self, encryption_key: str, encrypted_data: dict):
-		""" Decrypts the data """
-		key = unhexlify(encryption_key)
-		formated_data = self.format_data(encrypted_data['data'])
-		nonce = unhexlify(formated_data['nonce'])
-		cipher = AES.new(key, AES.MODE_EAX, nonce)
-		cipher_text = unhexlify(formated_data['encrypted data'])
-		tag = unhexlify(formated_data['tag'])
-		try:
-			plain_text = cipher.decrypt_and_verify(cipher_text, tag)
-			return plain_text.decode()
-		except ValueError:
-			print('invalid')
-			None
-
-	def decrypt_encryption_key(self, publickey: str, encrypted_decryption_key_data: str):
-		encrypted_pub = hashlib.sha256(publickey.encode()).hexdigest()
-		decryption_key = encrypted_decryption_key_data.replace(encrypted_pub, '')
-		return decryption_key.hex()
-
-	def combine(self, publickey: str, encryption_key: str):
-		encrypted_pub = hashlib.sha256(publickey.encode()).hexdigest()
-		random_place = random.randint(0, len(encrypt_key))
-		new_string = encryption_key[:random_place] + \
-		    encrypted_pub + encryption_key[random_place:]
-		return new_string
-
-	def encrypt(self, data: str, key=None):
-		encoded = data.encode()
-		if key == None:
-			key = self.generate_new_key()
-			decrypt_key = key
-		else:
-			decrypt_key = None
-		data = data.encode()
-		key = unhexlify(key)
-		cipher = AES.new(key, AES.MODE_EAX)
-		encrypted_data, tag = cipher.encrypt_and_digest(data)
-		return {'data': f'{cipher.nonce.hex()}+{encrypted_data.hex()}+{tag.hex()}', 'key': decrypt_key}
-
-	def format_data(self, data: str):
-		result = data.split('+')
-		result = {'nonce': result[0], 'encrypted data': result[1], 'tag': result[2]}
-		return result
-
-	def generate_new_key(self):
-		key = get_random_bytes(32)
-		cipher = AES.new(key, AES.MODE_EAX)
-		cipher = cipher.hexdigest()
-		return cipher
-=======
-# class Onion_Signatures:
-# 	""" Encrypts the data on the transaction by using layers of encryption """
-
-# 	def __init__(self):
-# 		pass
-
-# 	def make_onion_signature(self, transaction: dict):
-# 		""" encrypts all the transaction data """
-# 		# Miner generates a random number of keys to use for encryption and the sender and the receiver encrypt their own sets of the miner's keys
-# 		# Miner's randomly generated keys encrypt the sender and receiver
-# 		# add keys used for encryption to a new part called encoding and combine the sender's publickey and the key for decrypting with it and do the same with receiver in a different set
-# 		# make it look like this: {'sender_encoding': sender + decryptionkey, 'receiver_encding': receiver + decryptionkey}
-# 		sender = transaction['sender']
-# 		receiver = transaction['receiver']
-# 		amount = transaction['amount']
-# 		signature_of_sender = transaction['signature']
-# 		encryption_keys = []
-
-# 		layers = 13
-# 		for x in ranage(layers):
-# 			key = self.generate_new_key()
-# 			sender = str(sender)
-# 			receiver = str(receiver)
-# 			signature_of_sender = str(signature_of_sender)
-# 			sender = self.encrypt(sender, key=key)
-# 			receiver = self.encrypt(receiver, key=key)
-# 			if len(encryption_keys) == 0:
-# 				encryption_keys.append(key)
-# 			else:
-# 				for used_key in encryption_keys:
-# 					encrypted_key = self.encrypt(used_key, key)
-# 					encryption_keys[encryption_keys.index(used_key)] = encrypted_key
-# 				encryption_keys.append(key)
-# 		sender_set = self.combine(sender, key)
-# 		receiver_set = self.combine(receiver, key)
-# 		sender_sets = encryption_keys
-# 		receiver_sets = encryption_keys
-# 		sender_sets[sender_sets.index(key)] = sender_set
-# 		receiver_sets[receiver_sets.index(key)] = receiver_sets
-# 		transaction['sender'] = sender
-# 		transaction['receiver'] = receiver
-# 		transaction.update(
-# 		    {'sender set': sender_sets, 'receiver set': receiver_sets})
-# 		return transaction
-
-# 	def decrypt_and_verify_data(self, encryption_key: str, encrypted_data: dict):
-# 		""" Decrypts the data """
-# 		key = unhexlify(encryption_key)
-# 		formated_data = self.format_data(encrypted_data['data'])
-# 		nonce = unhexlify(formated_data['nonce'])
-# 		cipher = AES.new(key, AES.MODE_EAX, nonce)
-# 		cipher_text = unhexlify(formated_data['encrypted data'])
-# 		tag = unhexlify(formated_data['tag'])
-# 		try:
-# 			plain_text = cipher.decrypt_and_verify(cipher_text, tag)
-# 			return plain_text.decode()
-# 		except ValueError:
-# 			print('invalid')
-# 			None
-
-# 	def decrypt_encryption_key(self, publickey: str, encrypted_decryption_key_data: str):
-# 		encrypted_pub = hashlib.sha256(publickey.encode()).hexdigest()
-# 		decryption_key = encrypted_decryption_key_data.replace(encrypted_pub, '')
-# 		return decryption_key.hex()
-
-# 	def combine(self, publickey: str, encryption_key: str):
-# 		encrypted_pub = hashlib.sha256(publickey.encode()).hexdigest()
-# 		random_place = random.randint(0, len(encrypt_key))
-# 		new_string = encryption_key[:random_place] + \
-# 		    encrypted_pub + encryption_key[random_place:]
-# 		return new_string
-
-# 	def encrypt(self, data: str, key=None):
-# 		encoded = data.encode()
-# 		if key == None:
-# 			key = self.generate_new_key()
-# 			decrypt_key = key
-# 		else:
-# 			decrypt_key = None
-# 		data = data.encode()
-# 		key = unhexlify(key)
-# 		cipher = AES.new(key, AES.MODE_EAX)
-# 		encrypted_data, tag = cipher.encrypt_and_digest(data)
-# 		return {'data': f'{cipher.nonce.hex()}+{encrypted_data.hex()}+{tag.hex()}', 'key': decrypt_key}
-
-# 	def format_data(self, data: str):
-# 		result = data.split('+')
-# 		result = {'nonce': result[0], 'encrypted data': result[1], 'tag': result[2]}
-# 		return result
-
-# 	def generate_new_key(self):
-# 		key = get_random_bytes(32)
-# 		cipher = AES.new(key, AES.MODE_EAX)
-# 		cipher = cipher.hexdigest()
-# 		return cipher
->>>>>>> 1cfa325 (test)
 
 
 class Ring_example:
@@ -401,32 +181,6 @@ for i in range(size):
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
-	# wallet = Wallet_generation()
- 	# keys = wallet.generate()
-	# pub_key = keys['public key']
-	# priv_key = keys['private key']
-	# print(pub_key)
-	# print(priv_key)
-	# signer = Signatures()
-	# signature = signer.sign(priv_key, 'Alice')
-	# #print(signature)
-	# valid = signer.verify(pub_key, 'Alice', signature)
-	# #print(valid)
-	# onion = Onion_Signatures()
-	# encrypt_key = onion.generate_new_key()
-	# print({'encrypt key':encrypt_key})
-	# key_combined = onion.combine('Alice', encrypt_key)
-	# print({'combined key':key_combined})
-	# encrypted_data = onion.encrypt('example', encrypt_key) #Encrypts data using the encryption key
-	# print({'encrypted data':encrypted_data})
-	# #decrypt = onion.decrypt('Alice', key)
-	# decrypted_data = onion.decrypt_and_verify_data(encrypt_key, encrypted_data) # decrypts the data
-	# print(decrypted_data)
-	# #print(decrypt)
-	size = 17
-=======
 	wallet = Wallet_generation()
 	keys = wallet.generate()
 	print(keys)
->>>>>>> 1cfa325 (test)
