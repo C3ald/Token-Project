@@ -10,4 +10,8 @@ randomX
 *.pem
 *.key
 *.csr
+<<<<<<< HEAD
+=======
+*.der
+>>>>>>> 1cfa325 (test)
 nodes.txt
