@@ -32,22 +32,26 @@ class Wallet_generation:
 
 	def generate(self):
 		""" Generates a new set of wallet keys """
-		key = ECC.generate(curve='P-256')
+		ecc = ECC
+		seed = self.seed_gen().encode()
+		encoded_seed = int.from_bytes(seed, 'big')
+		ecc.d = encoded_seed
+		key = ecc.generate(curve='P-256')
 		public = key.public_key().export_key(format='DER')
 		private = key.export_key(format='DER')
-		results = {'public key': public, 'private key': private}
+		results = {'public key': hexlify(public).decode(), 'private key': hexlify(private).decode(), 'seed': seed.decode()}
 		return results
 
 	def seed_gen(self, password=None):
 		if not password:
 			word_file = "./seeds.txt"
 			words = open(word_file).read().splitlines()
-			num_of_seeds = 8
+			num_of_seeds = 23
 			seeds = random.sample(words, num_of_seeds)
 			seed = ' '.join(seeds)
 		else:
 			seed = password
-		print(seed)
+		# print(seed)
 		return seed
 	# def generate(self):
 	# 	""" Generates a new set of wallet keys """
