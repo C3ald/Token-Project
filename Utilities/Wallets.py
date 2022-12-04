@@ -23,7 +23,7 @@ from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.fernet import Fernet
 
-
+      # test
 class Wallet_generation:
 	""" Wallet Generation """
 
