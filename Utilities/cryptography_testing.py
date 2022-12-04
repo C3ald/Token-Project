@@ -3,11 +3,15 @@ from passlib.hash import pbkdf2_sha256
 import hashlib
 import random
 import base64
-
+import math
+from Crypto.Hash import keccak
 import string
 import requests as r
-
-
+import sys
+try:
+	from Utilities.Wallets import Wallet_generation, Signatures
+except:
+        from Wallets import Wallet_generation, Signatures
 
 
 
@@ -109,7 +113,7 @@ class Ring_CT():
 
 	def calculate_number_signatures(self, blockchain):
 		""" Calculates the number of decoy transactions """
-		number_of_decoy_addr = random.randint(4,5)
+		number_of_decoy_addr = 10
 		return number_of_decoy_addr
 
 	def shuffle(self, ring_signitures):
@@ -144,17 +148,23 @@ class primary_addresses():
 		""" Makes the primary address and encodes it"""
 		data = public_view
 		encoded_data = data.encode()
-		encoded_data = base64.b64encode(encoded_data)
-		encoded_primary = hashlib.sha256(encoded_data).hexdigest()
-		return encoded_primary
+		# encoded_data = base64.b64encode(encoded_data)
+		encoded_primary = hashlib.sha256(encoded_data).digest()
+		H_v = int.from_bytes(encoded_primary, 'little')
+		P_v = int.from_bytes(encoded_data, 'little')
+		P = hashlib.sha256(str(P_v*H_v).encode()).hexdigest()
+		return P
 
 
 	def decode_primary_address(self,primary_address, public_view):
 		data = public_view 
 		encoded_data = data.encode()
-		encoded_data = base64.b64encode(encoded_data)
-		hashed_data = hashlib.sha256(encoded_data).hexdigest()
-		if hashed_data == primary_address:
+		# encoded_data = base64.b64encode(encoded_data)
+		hashed_data = hashlib.sha256(encoded_data).digest()
+		H_v = int.from_bytes(encoded_primary, 'little')
+		P_v = int.from_bytes(encoded_data, 'little')
+		P = hashlib.sha256(str(P_v*H_v).encode()).hexdigest()
+		if P == primary_address:
 			return True
 		else:
 			return False
@@ -163,27 +173,34 @@ class primary_addresses():
 
 
 
+
+
 class Make_Keys():
-	""" creates wallet keys or addresses """
+	""" creates wallet keys """
 	def __init__(self):
 		pass
 
-	def make_password(self):
-		characters = string.ascii_letters + string.punctuation  + string.digits
-		passwd =  "".join(random.choice(characters) for x in range(90))
-		return str(passwd)
+	# def make_password(self):
+	# 	characters = string.ascii_letters + string.punctuation  + string.digits
+	# 	passwd =  "".join(random.choice(characters) for x in range(90))
+	# 	return str(passwd)
 
 
 	def make_spend_view_receive_keys(self):
-		password = str(self.make_password())
-		priv_spend = str(pbkdf2_sha256.hash(password))
-		priv_spend = priv_spend.replace('$pbkdf2-sha256$29000$', '')
-		pub_spend = str(pbkdf2_sha256.hash(priv_spend))
-		pub_spend = pub_spend.replace('$pbkdf2-sha256$29000$', '')
-		view_key = str(pbkdf2_sha256.hash(priv_spend))
-		view_key = view_key.replace('$pbkdf2-sha256$29000$', '')
+		# password = str(self.make_password())
+		# priv_spend = str(pbkdf2_sha256.hash(password))
+		# priv_spend = priv_spend.replace('$pbkdf2-sha256$29000$', '')
+		# pub_spend = str(pbkdf2_sha256.hash(priv_spend))
+		# pub_spend = pub_spend.replace('$pbkdf2-sha256$29000$', '')
+		# view_key = str(pbkdf2_sha256.hash(priv_spend))
+		# view_key = view_key.replace('$pbkdf2-sha256$29000$', '')
+		wallet = Wallet_generation()
+		keys = wallet.generate()
+		seed = keys['seed']
+		view_key = keys['public key']
+		priv_spend = keys['private key']
 		prime_addr = primary_addresses().make_primary_address(view_key)
-		return {'private spend key': priv_spend, 'public spend key': pub_spend, 'view key': view_key, 'primary address': prime_addr, 'seed for wallet': password}
+		return {'private spend key': priv_spend, 'view key': view_key, 'primary address': prime_addr, 'seed for wallet': seed}
 
 
 	def make_stealth_keys(self, primary_address):
@@ -191,7 +208,38 @@ class Make_Keys():
 		stealth_address = stealth_address.replace('$pbkdf2-sha256$29000$', '')
 		return stealth_address
 
-	
+class Stealth_keys:
+#In Monero, coins are received to a unique, one-time stealth address. The formula for stealth addresses is as follows:
+
+#P = Hs(rA)G + B
+
+#Where:
+
+#P -- the final stealth address (one-time output key, the destination where funds will actually be sent);
+#Hs* -- a hashing algorithm that returns a scalar (i.e., the hash output is interpreted as an integer and reduced modulo l);
+#r -- the new random scalar Alice chose for this transaction;
+#A -- Bob's public view key;
+#G -- the standard Ed25519 base point;
+#B -- Bob's public spend key
+        def __init__(self):
+                None
+        
+        def generate_r(self):
+                max_possible = sys.maxsize
+                min_possible = max_possible * -1
+                r = random.randint(min_possible,max_possible)
+                return r
+        def gen_p(self, public_view_key:str, primary_address:str):
+                """ Generates the temporary address for the transaction """
+                r = self.generate_r()
+                A = int.from_bytes(public_view_key.encode(), 'big')
+                B = int.from_bytes(primary_address.encode(),'big')
+                G = 9
+                k = keccak.new(digest_bits=256)
+                Hs = int.from_bytes(k.new(str(r*A)).digest(), 'big')
+                P = Hs*G+B
+                return P
+        
 
 class Check_Wallet_Balance():
 	""" Checks Balance and the validity of wallet addresses """
@@ -368,6 +416,9 @@ class Decoy_addresses():
 		transactions.append({'sender':key1['publickey'], 'receiver':key2['publickey'],'amount':random_amount})
 		transactions = self.shuffle(transactions)
 		return transactions
+#
+
+
 
 	def shuffle(self,transactions: list):
 		""" Shuffles the transactions """
@@ -390,7 +441,6 @@ if __name__ == '__main__':
 	keys = Make_Keys().make_spend_view_receive_keys()
 	stealth_keys = Make_Keys().make_stealth_keys(primary_address=keys['primary address'])
 	print(keys)
-	print()
-	print()
-	print(f'stealth address: {stealth_keys}')
-
+	print(f'\n\nstealth address: {stealth_keys}')
+	stealth = Stealth_keys()
+	
