@@ -4,6 +4,7 @@ import hashlib
 import random
 import base64
 import math
+from binascii import unhexlify, hexlify
 from Crypto.Hash import keccak
 import string
 import requests as r
@@ -225,27 +226,48 @@ class Stealth_keys:
                 None
         
         def generate_r(self):
+                """ generates a prime number for r """
                 max_possible = sys.maxsize
-                min_possible = max_possible * -1
-                r = random.randint(min_possible,max_possible)
+                r = random.randint(3,max_possible)
+                #print(r)
+                is_prime = self.check_prime(r)
+                while is_prime == False:
+                        r = random.randint(3,max_possible)
+                        #print(r)
+                        is_prime = self.check_prime(r)
                 return r
-        def gen_p(self, public_view_key:str, primary_address:str):
+        
+        def gen_p(self, public_view_key:str, primary_address:str, r=None):
                 """ Generates the temporary address for the transaction """
-                r = self.generate_r()
+                #r = self.generate_r()
+                if not r:
+                        r = self.generate_r()
                 A = int.from_bytes(public_view_key.encode(), 'big')
                 B = int.from_bytes(primary_address.encode(),'big')
-                G = 9
+                G = int(A/B)
                 k = keccak.new(digest_bits=256)
-                Hs = int.from_bytes(k.new(str(r*A)).digest(), 'big')
+                ra = str(r*A)
+                Hs = int.from_bytes(k.update(ra.encode()).digest() , 'big')
                 P = Hs*G+B
                 return P
         
+        def check_prime(self, number):
+                """ checks if prime number """
+                prime_flag = 0
+                for i in range(2,int(math.sqrt(number)) +1):
+                        if number % i == 0:
+                                return False
+                return True
 
+                
+                
+        
 class Check_Wallet_Balance():
 	""" Checks Balance and the validity of wallet addresses """
 	def __init__(self):
 		self.stealth_addresses = []
 		self.transactions = []
+		self.signatures = []
 	def verify_stealth_keys(self, stealth_key, primary_address):
 		full_stealth_address = '$pbkdf2-sha256$29000$'+stealth_key
 		verify = pbkdf2_sha256.verify(primary_address, full_stealth_address)
@@ -328,7 +350,7 @@ class Check_Wallet_Balance():
 		return balance
 
 
-	def sender_check(self, sender_receive_key, blockchain):
+	def sender_check(self, view_key, blockchain):
 		i = 1
 		balance = 0
 		if 1 < len(blockchain):
@@ -339,9 +361,9 @@ class Check_Wallet_Balance():
 					sender_signature = transaction['sender signature']
 					for sender in senders:
 						amount = transaction['amount']
-						verify_wallet = self.verify_stealth_keys(sender, sender_receive_key)
-						verify2 = self.verify_keys(sender_receive_key, sender_signature)
-						if verify_wallet == True and verify2 == True:
+			
+						verify = self.verify_keys(view_key, sender_signature)
+						if verify_wallet == True:
 							verify_double_spend = self.double_spend_check(stealth_key=sender, chain=blockchain)
 							if verify_double_spend == False:
 								self.transactions.append({'send':transaction})
@@ -367,6 +389,15 @@ class Check_Wallet_Balance():
 		else:
 			double_spend = True
 			return double_spend
+	def duplicate_sign(self, signature, view_key, receiver):
+		""" checks for duplicate signatures """
+		pub = unhexlify(view_key)
+		sign = Signatures()
+		valid = sign.verify(pub, receiver, signature)
+		if valid == True:
+			if signature not in self.signatures:
+				return True
+		return False
 
 	def verify_keys(self, publickey, privatekey):
 		full_publickey = '$pbkdf2-sha256$29000$'+publickey
@@ -439,8 +470,13 @@ if __name__ == '__main__':
 	Make_Keys()
 	Ring_CT()
 	keys = Make_Keys().make_spend_view_receive_keys()
-	stealth_keys = Make_Keys().make_stealth_keys(primary_address=keys['primary address'])
+	#stealth_keys = Make_Keys().make_stealth_keys(primary_address=keys['primary address'])
 	print(keys)
-	print(f'\n\nstealth address: {stealth_keys}')
+	#print(f'\n\nstealth address: {stealth_keys}')
 	stealth = Stealth_keys()
+	pub = 'test key'
+	priv = 'test private key'
+	res = stealth.gen_p(public_view_key=priv, primary_address=pub)
+	print('\n\n')
+	print(res)
 	
